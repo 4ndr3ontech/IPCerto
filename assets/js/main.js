@@ -67,41 +67,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('time-info').textContent = `${horas}h${minutos}min - ${dia}/${mes}/${ano}`;
     }
 
-    // 4. Lógica de Localização Geográfica (Geo IP) e Provedor (Corrigida para IPv4/PTR)
+    // 4. Lógica de Localização Geográfica (Geo IP) - Apenas ISP e Mapa
     async function fetchGeoLocation() {
         try {
-            // Busca o IPv4 especificamente para garantir que o Hostname (PTR) venha preenchido,
-            // já que a maioria dos provedores não configura PTR para IPv6 residencial.
-            let targetUrl = 'https://ipapi.co/json/';
-            try {
-                const ipv4Req = await fetch('https://api.ipify.org?format=json');
-                if (ipv4Req.ok) {
-                    const ipv4Data = await ipv4Req.json();
-                    targetUrl = `https://ipapi.co/${ipv4Data.ip}/json/`; // Força a busca pelo IPv4
-                }
-            } catch (ignore) {}
-
-            const response = await fetch(targetUrl);
+            const response = await fetch('https://ipapi.co/json/');
             if (!response.ok) throw new Error('Falha na API de GeoIP');
             const data = await response.json();
             
-            // Atualiza o painel superior de ISP e guarda o DNS na propriedade dataset
+            // Atualiza ISP
             const provider = data.org || data.asn || 'Provedor não identificado';
-            const hostname = data.hostname || 'Sem hostname reverso configurado';
-            
             document.getElementById('isp-info').textContent = provider;
-            
-            const dnsBox = document.getElementById('dns-ptr-info');
-            dnsBox.textContent = hostname;
-            dnsBox.dataset.hostname = hostname; // Importante para a função de copiar
+            document.getElementById('geo-isp').textContent = provider;
 
-            // Preenche a grelha de 6 blocos do Geo IP
+            // Preenche o resto da grelha de 6 blocos do Geo IP
             document.getElementById('geo-ip').textContent = data.ip || 'Indisponível';
-            document.getElementById('geo-hostname').textContent = data.hostname || data.asn || 'Sem hostname';
             document.getElementById('geo-city').textContent = data.city || 'Desconhecida';
             document.getElementById('geo-region').textContent = data.region || 'Desconhecido';
             document.getElementById('geo-country').textContent = data.country_name || 'Desconhecido';
-            document.getElementById('geo-isp').textContent = provider;
             
             const lat = data.latitude;
             const lon = data.longitude;
@@ -110,13 +92,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('geo-coords').textContent = `📍 Coordenadas: ${lat}, ${lon}`;
                 document.getElementById('google-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
                 
-                // Limpa o mapa anterior se existir (evita erros ao recarregar localmente)
                 const mapContainer = L.DomUtil.get('map');
-                if (mapContainer != null) {
-                    mapContainer._leaflet_id = null;
-                }
+                if (mapContainer != null) mapContainer._leaflet_id = null;
 
-                // Inicializa o mapa Leaflet
                 const map = L.map('map').setView([lat, lon], 13);
                 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -147,11 +125,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Dispara todas as funções
+    // 5. NOVA LÓGICA: Consulta DNS Direta e Exclusiva para o IP Reverso (PTR) via Google DNS
+    async function fetchPTR() {
+        const dnsBox = document.getElementById('dns-ptr-info');
+        const geoHost = document.getElementById('geo-hostname');
+        
+        try {
+            // Obtém o IPv4
+            const req = await fetch('https://api.ipify.org?format=json');
+            if (!req.ok) throw new Error('Falha ao obter IP para PTR');
+            const { ip } = await req.json();
+
+            // Inverte o IPv4 para o formato DNS in-addr.arpa
+            const reversedIp = ip.split('.').reverse().join('.');
+            const ptrQuery = `${reversedIp}.in-addr.arpa`;
+
+            // Consulta diretamente os servidores de DNS da Google (DoH)
+            const dnsReq = await fetch(`https://dns.google/resolve?name=${ptrQuery}&type=PTR`);
+            const dnsData = await dnsReq.json();
+
+            let ptr = 'Sem hostname reverso configurado';
+            
+            // Verifica se a Google devolveu uma resposta válida de PTR
+            if (dnsData.Answer && dnsData.Answer.length > 0) {
+                ptr = dnsData.Answer[0].data;
+                if (ptr.endsWith('.')) {
+                    ptr = ptr.slice(0, -1); // Remove o ponto final técnico do DNS
+                }
+            }
+
+            // Atualiza a interface
+            dnsBox.textContent = ptr;
+            dnsBox.dataset.hostname = ptr;
+            if (geoHost) geoHost.textContent = ptr;
+
+        } catch (error) {
+            console.error('Erro na resolução do PTR:', error);
+            dnsBox.textContent = 'Sem hostname reverso configurado';
+            dnsBox.dataset.hostname = '';
+            if (geoHost) geoHost.textContent = 'Sem hostname';
+        }
+    }
+
+    // Dispara todas as funções paralelamente para carregar rápido
     fetchIPv4();
     fetchMainIp();
     updateTime();
     fetchGeoLocation();
+    fetchPTR(); // Nova função injetada aqui
 
     // Copiar IPv4
     copyIpv4Btn.addEventListener('click', async () => {
@@ -171,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => copyIpv6Btn.textContent = 'Copiar IPv6', 2000);
     });
 
-    // Copiar IP Reverso (DNS PTR)
+    // Copiar IP Reverso (DNS PTR) com Feedback Interativo
     const dnsBoxInfo = document.getElementById('dns-ptr-info');
     dnsBoxInfo.addEventListener('click', async () => {
         const textToCopy = dnsBoxInfo.dataset.hostname;
@@ -180,12 +201,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         await navigator.clipboard.writeText(textToCopy);
         
-        // Feedback visual de sucesso (verde)
         dnsBoxInfo.style.color = '#4ade80';
         dnsBoxInfo.style.borderColor = '#4ade80';
         dnsBoxInfo.textContent = '✔ Copiado com sucesso!';
         
-        // Retorna ao estado original passado 2 segundos
         setTimeout(() => {
             dnsBoxInfo.style.color = '';
             dnsBoxInfo.style.borderColor = '';
