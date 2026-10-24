@@ -7,9 +7,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ipv6Details = document.getElementById('ipv6-details');
     const copyIpv6Btn = document.getElementById('copy-ipv6-btn');
 
-    async function fetchClientIp() {
+    // 1. Força a descoberta do IPv4 através de um endpoint focado em v4
+    async function fetchIPv4() {
         try {
-            // Requisição para a nossa rota do Cloudflare Pages /api/ip
+            const response = await fetch('https://api.ipify.org?format=json');
+            if (!response.ok) throw new Error('Falha ao obter IPv4.');
+            const data = await response.json();
+            
+            ipv4El.textContent = data.ip;
+            ipv4Details.innerHTML = `Protocolo: <strong>IPv4</strong> • Ativo`;
+        } catch (error) {
+            ipv4El.textContent = 'Não detetado';
+            ipv4Details.innerHTML = `Rede sem suporte a IPv4 público`;
+        }
+    }
+
+    // 2. Busca o IP principal na nossa API do Cloudflare (geralmente IPv6)
+    async function fetchMainIp() {
+        try {
             const response = await fetch('/api/ip');
             
             if (!response.ok) {
@@ -23,26 +38,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (version === 'IPv6' || ip.includes(':')) {
                 ipv6El.textContent = ip;
                 ipv6Details.innerHTML = `Protocolo: <strong>IPv6</strong> • Ativo`;
-                
-                ipv4El.textContent = 'Não detetado nesta rota';
-                ipv4Details.innerHTML = `A ligação atual utiliza IPv6`;
             } else {
-                ipv4El.textContent = ip;
-                ipv4Details.innerHTML = `Protocolo: <strong>IPv4</strong> • Ativo`;
+                // Se a Cloudflare retornar IPv4, significa que não há IPv6
+                ipv6El.textContent = 'Não detetado';
+                ipv6Details.innerHTML = `A ligação atual utiliza apenas IPv4`;
                 
-                ipv6El.textContent = 'Não detetado nesta rota';
-                ipv6Details.innerHTML = `A ligação atual utiliza IPv4`;
+                // Aproveita para preencher o IPv4 caso a chamada externa falhe
+                if (ipv4El.textContent === 'A carregar...' || ipv4El.textContent === 'Não detetado') {
+                    ipv4El.textContent = ip;
+                    ipv4Details.innerHTML = `Protocolo: <strong>IPv4</strong> • Ativo`;
+                }
             }
         } catch (error) {
-            console.error('Erro na requisição:', error);
-            ipv4El.textContent = 'Indisponível';
+            console.error('Erro na requisição interna:', error);
             ipv6El.textContent = 'Indisponível';
-            ipv4Details.textContent = 'Erro de comunicação';
-            ipv6Details.textContent = 'Erro de comunicação';
+            ipv6Details.innerHTML = 'Erro de comunicação';
+            
+            if (ipv4El.textContent === 'A carregar...') {
+                ipv4El.textContent = 'Indisponível';
+                ipv4Details.textContent = 'Erro de comunicação';
+            }
         }
     }
 
-    await fetchClientIp();
+    // Dispara ambas as requisições ao mesmo tempo
+    fetchIPv4();
+    fetchMainIp();
 
     // Copiar IPv4
     copyIpv4Btn.addEventListener('click', async () => {
