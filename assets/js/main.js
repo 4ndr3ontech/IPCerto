@@ -7,15 +7,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             ipAddressEl.textContent = 'Buscando...';
             
-            // Tenta buscar da API do Worker
+            // Requisição para a API do Worker
             const response = await fetch('/api/ip');
             
             if (!response.ok) {
-                throw new Error('API não disponível');
+                throw new Error('Não foi possível obter o endereço IP.');
             }
 
             const data = await response.json();
             
+            // Exibe o IP real retornado pelo servidor
             ipAddressEl.textContent = data.ip;
             
             if (ipDetailsEl) {
@@ -25,19 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 `;
             }
         } catch (error) {
-            console.warn('API /api/ip não respondendo diretamente no modo estático. Usando IP simulado de teste local.');
-            // Fallback elegante para testes visuais locais sem o worker ativo
-            ipAddressFictitious();
-        }
-    }
-
-    function ipAddressFictitious() {
-        ipAddressEl.textContent = '177.182.99.15'; // Exemplo de IP público brasileiro simulado para teste
-        if (ipDetailsEl) {
-            ipDetailsEl.innerHTML = `
-                <p>Versão do Protocolo: <strong>IPv4</strong></p>
-                <p style="color: #38bdf8;">Ambiente de homologação local (Simulação de IP Público)</p>
-            `;
+            console.error('Erro ao buscar IP:', error);
+            ipAddressEl.textContent = 'Indisponível';
+            if (ipDetailsEl) {
+                ipDetailsEl.innerHTML = `<p style="color: #ef4444;">Falha ao comunicar com o servidor de IP.</p>`;
+            }
         }
     }
 
@@ -45,6 +38,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     copyBtn.addEventListener('click', async () => {
         const textToCopy = ipAddressEl.textContent;
+        if (!textToCopy || textToCopy === 'Buscando...' || textToCopy === 'Indisponível') return;
+        
         try {
             await navigator.clipboard.writeText(textToCopy);
             const originalText = copyBtn.textContent;
