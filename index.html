@@ -58,7 +58,14 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
                     Provedor de Internet (ISP)
                 </span>
-                <div class="info-value highlight" id="isp-info">A carregar informações...</div>
+                <div class="info-value highlight" id="isp-info" style="margin-bottom: 16px;">A carregar informações...</div>
+                
+                <!-- Nova Caixa Interativa de IP Reverso (DNS PTR) -->
+                <span class="info-label" style="font-size: 0.7rem; color: #64748b;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                    IP Reverso (DNS PTR):
+                </span>
+                <div class="dns-box" id="dns-ptr-info" title="Clique para copiar">A procurar hostname...</div>
             </div>
             
             <div class="info-box box-time">
@@ -70,7 +77,7 @@
             </div>
         </div>
 
-        <!-- Nova Secção: Localização Geográfica Estimada (Geo IP) -->
+        <!-- Localização Geográfica Estimada (Geo IP) -->
         <div class="geo-container">
             <div class="geo-header">
                 <div>

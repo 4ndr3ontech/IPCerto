@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 2. Busca o IP principal na API interna (geralmente IPv6 se Dual Stack ativo)
+    // 2. Busca o IP principal na API interna
     async function fetchMainIp() {
         try {
             const response = await fetch('/api/ip');
@@ -67,21 +67,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('time-info').textContent = `${horas}h${minutos}min - ${dia}/${mes}/${ano}`;
     }
 
-    // 4. Nova Lógica de Localização Geográfica (Geo IP) e Mapa Leaflet
+    // 4. Lógica de Localização Geográfica (Geo IP) e Provedor
     async function fetchGeoLocation() {
         try {
-            // Utilizamos a API do ipapi.co para obter os dados completos
             const response = await fetch('https://ipapi.co/json/');
             if (!response.ok) throw new Error('Falha na API de GeoIP');
             const data = await response.json();
             
-            // Atualiza o painel superior de ISP
+            // Atualiza o painel superior de ISP e guarda o DNS na propriedade dataset
             const provider = data.org || data.asn || 'Provedor não identificado';
+            const hostname = data.hostname || 'Sem hostname reverso configurado';
+            
             document.getElementById('isp-info').textContent = provider;
+            
+            const dnsBox = document.getElementById('dns-ptr-info');
+            dnsBox.textContent = hostname;
+            dnsBox.dataset.hostname = hostname; // Importante para a função de copiar
 
             // Preenche a grelha de 6 blocos do Geo IP
             document.getElementById('geo-ip').textContent = data.ip || 'Indisponível';
-            document.getElementById('geo-hostname').textContent = data.asn || 'Sem hostname reverso';
+            document.getElementById('geo-hostname').textContent = data.asn || 'Sem hostname';
             document.getElementById('geo-city').textContent = data.city || 'Desconhecida';
             document.getElementById('geo-region').textContent = data.region || 'Desconhecido';
             document.getElementById('geo-country').textContent = data.country_name || 'Desconhecido';
@@ -97,13 +102,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Inicializa o mapa Leaflet
                 const map = L.map('map').setView([lat, lon], 13);
                 
-                // Carrega os blocos do mapa OpenStreetMap
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                     attribution: '© OpenStreetMap'
                 }).addTo(map);
                 
-                // Adiciona o marcador personalizado verde no mapa
                 const customIcon = L.icon({
                     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
                     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -127,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Dispara todas as funções de inicialização simultaneamente
+    // Dispara todas as funções
     fetchIPv4();
     fetchMainIp();
     updateTime();
@@ -149,5 +152,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         await navigator.clipboard.writeText(text);
         copyIpv6Btn.textContent = 'Copiado!';
         setTimeout(() => copyIpv6Btn.textContent = 'Copiar IPv6', 2000);
+    });
+
+    // Copiar IP Reverso (DNS PTR)
+    const dnsBoxInfo = document.getElementById('dns-ptr-info');
+    dnsBoxInfo.addEventListener('click', async () => {
+        const textToCopy = dnsBoxInfo.dataset.hostname;
+        
+        if (!textToCopy || textToCopy.includes('Sem hostname') || textToCopy.includes('procurar')) return;
+
+        await navigator.clipboard.writeText(textToCopy);
+        
+        // Feedback visual de sucesso (verde)
+        dnsBoxInfo.style.color = '#4ade80';
+        dnsBoxInfo.style.borderColor = '#4ade80';
+        dnsBoxInfo.textContent = '✔ Copiado com sucesso!';
+        
+        // Retorna ao estado original passado 2 segundos
+        setTimeout(() => {
+            dnsBoxInfo.style.color = '';
+            dnsBoxInfo.style.borderColor = '';
+            dnsBoxInfo.textContent = textToCopy;
+        }, 2000);
     });
 });
