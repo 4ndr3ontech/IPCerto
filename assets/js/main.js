@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ipv6Details = document.getElementById('ipv6-details');
     const copyIpv6Btn = document.getElementById('copy-ipv6-btn');
 
-    // 1. Força a descoberta do IPv4 através de um endpoint focado em v4
+    // 1. Força a descoberta do IPv4
     async function fetchIPv4() {
         try {
             const response = await fetch('https://api.ipify.org?format=json');
@@ -22,14 +22,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 2. Busca o IP principal na nossa API do Cloudflare (geralmente IPv6)
+    // 2. Busca o IP principal na API interna (geralmente IPv6 se Dual Stack ativo)
     async function fetchMainIp() {
         try {
             const response = await fetch('/api/ip');
-            
-            if (!response.ok) {
-                throw new Error('Falha ao obter IP do servidor.');
-            }
+            if (!response.ok) throw new Error('Falha ao obter IP do servidor.');
 
             const data = await response.json();
             const ip = data.ip;
@@ -48,7 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         } catch (error) {
-            console.error('Erro na requisição interna:', error);
             ipv6El.textContent = 'Indisponível';
             ipv6Details.innerHTML = 'Erro de comunicação';
             
@@ -65,31 +61,77 @@ document.addEventListener('DOMContentLoaded', async () => {
         const horas = String(now.getHours()).padStart(2, '0');
         const minutos = String(now.getMinutes()).padStart(2, '0');
         const dia = String(now.getDate()).padStart(2, '0');
-        const mes = String(now.getMonth() + 1).padStart(2, '0'); // Mês começa no 0
+        const mes = String(now.getMonth() + 1).padStart(2, '0');
         const ano = now.getFullYear();
         
         document.getElementById('time-info').textContent = `${horas}h${minutos}min - ${dia}/${mes}/${ano}`;
     }
 
-    // 4. Busca informações do Provedor de Internet (ISP)
-    async function fetchISPInfo() {
+    // 4. Nova Lógica de Localização Geográfica (Geo IP) e Mapa Leaflet
+    async function fetchGeoLocation() {
         try {
+            // Utilizamos a API do ipapi.co para obter os dados completos
             const response = await fetch('https://ipapi.co/json/');
-            if (!response.ok) throw new Error('Falha na API ISP');
+            if (!response.ok) throw new Error('Falha na API de GeoIP');
             const data = await response.json();
             
+            // Atualiza o painel superior de ISP
             const provider = data.org || data.asn || 'Provedor não identificado';
             document.getElementById('isp-info').textContent = provider;
+
+            // Preenche a grelha de 6 blocos do Geo IP
+            document.getElementById('geo-ip').textContent = data.ip || 'Indisponível';
+            document.getElementById('geo-hostname').textContent = data.asn || 'Sem hostname reverso';
+            document.getElementById('geo-city').textContent = data.city || 'Desconhecida';
+            document.getElementById('geo-region').textContent = data.region || 'Desconhecido';
+            document.getElementById('geo-country').textContent = data.country_name || 'Desconhecido';
+            document.getElementById('geo-isp').textContent = provider;
+            
+            const lat = data.latitude;
+            const lon = data.longitude;
+            
+            if (lat && lon) {
+                document.getElementById('geo-coords').textContent = `📍 Coordenadas: ${lat}, ${lon}`;
+                document.getElementById('google-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+                
+                // Inicializa o mapa Leaflet
+                const map = L.map('map').setView([lat, lon], 13);
+                
+                // Carrega os blocos do mapa OpenStreetMap
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+                
+                // Adiciona o marcador personalizado verde no mapa
+                const customIcon = L.icon({
+                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+                    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+                
+                L.marker([lat, lon], {icon: customIcon}).addTo(map)
+                    .bindPopup(`<b>${data.city}</b><br>${data.region}`)
+                    .openPopup();
+            } else {
+                document.getElementById('geo-coords').textContent = `📍 Coordenadas: Não encontradas`;
+                document.getElementById('map').innerHTML = '<div style="display:flex; height:100%; align-items:center; justify-content:center; color:#94a3b8;">Mapa indisponível.</div>';
+            }
+
         } catch (error) {
+            console.error('Erro ao buscar Geo IP:', error);
             document.getElementById('isp-info').textContent = 'Informação indisponível';
         }
     }
 
-    // Dispara todas as funções de inicialização
+    // Dispara todas as funções de inicialização simultaneamente
     fetchIPv4();
     fetchMainIp();
     updateTime();
-    fetchISPInfo();
+    fetchGeoLocation();
 
     // Copiar IPv4
     copyIpv4Btn.addEventListener('click', async () => {
