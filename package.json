@@ -1,0 +1,26 @@
+{
+  "name": "ipcerto",
+  "version": "1.0.0",
+  "description": "Aplicação profissional de identificação de IP, rede e ferramentas complementares",
+  "private": true,
+  "type": "module",
+"scripts": {
+    "dev": "wrangler pages dev .",
+    "build": "tsc && vite build",
+    "preview": "wrangler pages dev .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "lint": "eslint src/**/*.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240000.0",
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.0",
+    "wrangler": "^3.22.0"
+  }
+}
