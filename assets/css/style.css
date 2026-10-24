@@ -185,6 +185,44 @@ body {
     color: #64748b;
 }
 
+/* --- Informações Extra (Provedor e Data/Hora) --- */
+.info-extra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 32px;
+}
+
+.info-box {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-left: 4px;
+    font-weight: 500;
+}
+
+.info-value {
+    color: #ffffff;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: rgba(17, 28, 56, 0.5);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
 /* --- Rodapé --- */
 .footer {
     background-color: #080e1f;
@@ -233,5 +271,8 @@ body {
     }
     .footer-info {
         text-align: center;
+    }
+    .info-extra {
+        flex-direction: column;
     }
 }

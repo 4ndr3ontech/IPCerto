@@ -39,11 +39,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ipv6El.textContent = ip;
                 ipv6Details.innerHTML = `Protocolo: <strong>IPv6</strong> • Ativo`;
             } else {
-                // Se a Cloudflare retornar IPv4, significa que não há IPv6
                 ipv6El.textContent = 'Não detetado';
                 ipv6Details.innerHTML = `A ligação atual utiliza apenas IPv4`;
                 
-                // Aproveita para preencher o IPv4 caso a chamada externa falhe
                 if (ipv4El.textContent === 'A carregar...' || ipv4El.textContent === 'Não detetado') {
                     ipv4El.textContent = ip;
                     ipv4Details.innerHTML = `Protocolo: <strong>IPv4</strong> • Ativo`;
@@ -61,9 +59,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Dispara ambas as requisições ao mesmo tempo
+    // 3. Atualiza a Data e Hora na interface
+    function updateTime() {
+        const now = new Date();
+        const horas = String(now.getHours()).padStart(2, '0');
+        const minutos = String(now.getMinutes()).padStart(2, '0');
+        const dia = String(now.getDate()).padStart(2, '0');
+        const mes = String(now.getMonth() + 1).padStart(2, '0'); // Mês começa no 0
+        const ano = now.getFullYear();
+        
+        document.getElementById('time-info').textContent = `${horas}h${minutos}min - ${dia}/${mes}/${ano}`;
+    }
+
+    // 4. Busca informações do Provedor de Internet (ISP)
+    async function fetchISPInfo() {
+        try {
+            const response = await fetch('https://ipapi.co/json/');
+            if (!response.ok) throw new Error('Falha na API ISP');
+            const data = await response.json();
+            
+            const provider = data.org || data.asn || 'Provedor não identificado';
+            document.getElementById('isp-info').textContent = provider;
+        } catch (error) {
+            document.getElementById('isp-info').textContent = 'Informação indisponível';
+        }
+    }
+
+    // Dispara todas as funções de inicialização
     fetchIPv4();
     fetchMainIp();
+    updateTime();
+    fetchISPInfo();
 
     // Copiar IPv4
     copyIpv4Btn.addEventListener('click', async () => {
