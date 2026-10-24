@@ -67,10 +67,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('time-info').textContent = `${horas}h${minutos}min - ${dia}/${mes}/${ano}`;
     }
 
-    // 4. Lógica de Localização Geográfica (Geo IP) e Provedor
+    // 4. Lógica de Localização Geográfica (Geo IP) e Provedor (Corrigida para IPv4/PTR)
     async function fetchGeoLocation() {
         try {
-            const response = await fetch('https://ipapi.co/json/');
+            // Busca o IPv4 especificamente para garantir que o Hostname (PTR) venha preenchido,
+            // já que a maioria dos provedores não configura PTR para IPv6 residencial.
+            let targetUrl = 'https://ipapi.co/json/';
+            try {
+                const ipv4Req = await fetch('https://api.ipify.org?format=json');
+                if (ipv4Req.ok) {
+                    const ipv4Data = await ipv4Req.json();
+                    targetUrl = `https://ipapi.co/${ipv4Data.ip}/json/`; // Força a busca pelo IPv4
+                }
+            } catch (ignore) {}
+
+            const response = await fetch(targetUrl);
             if (!response.ok) throw new Error('Falha na API de GeoIP');
             const data = await response.json();
             
@@ -86,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             // Preenche a grelha de 6 blocos do Geo IP
             document.getElementById('geo-ip').textContent = data.ip || 'Indisponível';
-            document.getElementById('geo-hostname').textContent = data.asn || 'Sem hostname';
+            document.getElementById('geo-hostname').textContent = data.hostname || data.asn || 'Sem hostname';
             document.getElementById('geo-city').textContent = data.city || 'Desconhecida';
             document.getElementById('geo-region').textContent = data.region || 'Desconhecido';
             document.getElementById('geo-country').textContent = data.country_name || 'Desconhecido';
@@ -99,6 +110,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 document.getElementById('geo-coords').textContent = `📍 Coordenadas: ${lat}, ${lon}`;
                 document.getElementById('google-maps-link').href = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
                 
+                // Limpa o mapa anterior se existir (evita erros ao recarregar localmente)
+                const mapContainer = L.DomUtil.get('map');
+                if (mapContainer != null) {
+                    mapContainer._leaflet_id = null;
+                }
+
                 // Inicializa o mapa Leaflet
                 const map = L.map('map').setView([lat, lon], 13);
                 
