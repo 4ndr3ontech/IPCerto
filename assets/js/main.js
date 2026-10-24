@@ -1,59 +1,63 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const ipAddressEl = document.getElementById('ip-address');
-    const ipDetailsEl = document.getElementById('ip-details');
-    const copyBtn = document.getElementById('copy-btn');
+    const ipv4El = document.getElementById('ipv4-address');
+    const ipv4Details = document.getElementById('ipv4-details');
+    const copyIpv4Btn = document.getElementById('copy-ipv4-btn');
 
-    async function fetchClientIp() {
+    const ipv6El = document.getElementById('ipv6-address');
+    const ipv6Details = document.getElementById('ipv6-details');
+    const copyIpv6Btn = document.getElementById('copy-ipv6-btn');
+
+    // Função para buscar IPv4
+    async function fetchIPv4() {
         try {
-            ipAddressEl.textContent = 'Buscando...';
-            
-            // Requisição para a API do Worker
-            const response = await fetch('/api/ip');
-            
-            if (!response.ok) {
-                throw new Error('Não foi possível obter o endereço IP.');
-            }
-
+            const response = await fetch('https://api.ipify.org?format=json');
+            if (!response.ok) throw new Error('Indisponível');
             const data = await response.json();
-            
-            // Exibe o IP real retornado pelo servidor
-            ipAddressEl.textContent = data.ip;
-            
-            if (ipDetailsEl) {
-                ipDetailsEl.innerHTML = `
-                    <p>Versão do Protocolo: <strong>${data.version}</strong></p>
-                    <p>Consulta realizada em: ${new Date(data.timestamp).toLocaleTimeString()}</p>
-                `;
-            }
-        } catch (error) {
-            console.error('Erro ao buscar IP:', error);
-            ipAddressEl.textContent = 'Indisponível';
-            if (ipDetailsEl) {
-                ipDetailsEl.innerHTML = `<p style="color: #ef4444;">Falha ao comunicar com o servidor de IP.</p>`;
-            }
+            ipv4El.textContent = data.ip;
+            ipv4Details.innerHTML = `<p>Protocolo: <strong>IPv4</strong></p><p>Estado: Ativo</p>`;
+        } catch (e) {
+            ipv4El.textContent = 'Não suportado / Indisponível';
+            ipv4Details.innerHTML = `<p style="color: #94a3b8;">Rede configurada apenas em IPv6 ou sem suporte.</p>`;
         }
     }
 
-    await fetchClientIp();
-
-    copyBtn.addEventListener('click', async () => {
-        const textToCopy = ipAddressEl.textContent;
-        if (!textToCopy || textToCopy === 'Buscando...' || textToCopy === 'Indisponível') return;
-        
+    // Função para buscar IPv6
+    async function fetchIPv6() {
         try {
-            await navigator.clipboard.writeText(textToCopy);
-            const originalText = copyBtn.textContent;
-            copyBtn.textContent = 'Copiado!';
-            copyBtn.style.backgroundColor = '#22c55e';
-            copyBtn.style.color = '#ffffff';
+            const response = await fetch('https://api64.ipify.org?format=json');
+            if (!response.ok) throw new Error('Indisponível');
+            const data = await response.json();
             
-            setTimeout(() => {
-                copyBtn.textContent = originalText;
-                copyBtn.style.backgroundColor = '';
-                copyBtn.style.color = '';
-            }, 2000);
-        } catch (err) {
-            console.error('Erro ao copiar IP: ', err);
+            if (data.ip.includes(':')) {
+                ipv6El.textContent = data.ip;
+                ipv6Details.innerHTML = `<p>Protocolo: <strong>IPv6</strong></p><p>Estado: Ativo</p>`;
+            } else {
+                throw new Error('Não é IPv6');
+            }
+        } catch (e) {
+            ipv6El.textContent = 'Não detetado';
+            ipv6Details.innerHTML = `<p style="color: #94a3b8;">Ligação IPv6 não ativa nesta rede.</p>`;
         }
+    }
+
+    // Executa as requisições em paralelo
+    await Promise.all([fetchIPv4(), fetchIPv6()]);
+
+    // Copiar IPv4
+    copyIpv4Btn.addEventListener('click', async () => {
+        const text = ipv4El.textContent;
+        if (text.includes('Indisponível') || text.includes('carregar')) return;
+        await navigator.clipboard.writeText(text);
+        copyIpv4Btn.textContent = 'Copiado!';
+        setTimeout(() => copyIpv4Btn.textContent = 'Copiar IPv4', 2000);
+    });
+
+    // Copiar IPv6
+    copyIpv6Btn.addEventListener('click', async () => {
+        const text = ipv6El.textContent;
+        if (text.includes('detetado') || text.includes('carregar')) return;
+        await navigator.clipboard.writeText(text);
+        copyIpv6Btn.textContent = 'Copiado!';
+        setTimeout(() => copyIpv6Btn.textContent = 'Copiar IPv6', 2000);
     });
 });

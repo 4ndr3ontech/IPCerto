@@ -3,56 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPCerto — Qual é o meu IP? Consulta de Rede e IP Público</title>
-    <meta name="description" content="Descubra seu endereço IP público atual de forma rápida, segura e precisa. Ferramentas completas de rede e geolocalização.">
-    <link rel="canonical" href="https://ipcerto.com/">
-    
-    <!-- Open Graph / Redes Sociais -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ipcerto.com/">
-    <meta property="og:title" content="IPCerto — Qual é o meu IP? Consulta de Rede e IP Público">
-    <meta property="og:description" content="Descubra seu endereço IP público atual de forma rápida, segura e precisa.">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://ipcerto.com/">
-    <meta property="twitter:title" content="IPCerto — Qual é o meu IP? Consulta de Rede e IP Público">
-    <meta property="twitter:description" content="Descubra seu endereço IP público atual de forma rápida, segura e precisa.">
-
-    <link rel="stylesheet" href="./assets/css/main.css">
+    <title>IPCerto — Qual é o meu IP?</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <h1 class="logo">IP<span>Certo</span></h1>
-            <nav class="site-nav">
-                <a href="#ferramentas">Ferramentas</a>
-                <a href="#sobre">Sobre</a>
-            </nav>
+    <!-- Topo / Cabeçalho Profissional -->
+    <header class="navbar">
+        <div class="logo-container">
+            <div class="logo">IP<span>Certo</span></div>
+            <span class="badge">Dual Stack</span>
         </div>
+        <nav class="nav-links">
+            <a href="#inicio" class="active">Início</a>
+            <a href="#ferramentas">Ferramentas</a>
+            <a href="#sobre">Sobre</a>
+        </nav>
     </header>
 
-    <main class="main-content">
-        <section class="ip-hero">
-            <div class="container">
-                <h2>O seu endereço IP público é:</h2>
-                <div class="ip-display-box">
-                    <span id="ip-address" class="ip-value">Carregando...</span>
-                    <button id="copy-btn" class="btn-primary" type="button">Copiar IP</button>
+    <!-- Conteúdo Principal -->
+    <main class="ip-container" id="inicio">
+        <h2>O SEU ENDEREÇO IP PÚBLICO É:</h2>
+        
+        <div class="ip-grid">
+            <!-- Cartão IPv4 -->
+            <div class="ip-card">
+                <div class="card-header">
+                    <span class="protocol-tag ipv4">IPv4</span>
+                    <h3>Endereço Principal</h3>
                 </div>
-                <div id="ip-details" class="ip-details">
-                    <!-- Detalhes adicionais serão preenchidos via JavaScript -->
-                </div>
+                <div class="ip-display" id="ipv4-address">A carregar...</div>
+                <button class="copy-btn" id="copy-ipv4-btn">Copiar IPv4</button>
+                <div class="ip-details" id="ipv4-details">A detetar ligação...</div>
             </div>
-        </section>
+
+            <!-- Cartão IPv6 -->
+            <div class="ip-card">
+                <div class="card-header">
+                    <span class="protocol-tag ipv6">IPv6</span>
+                    <h3>Endereço Moderno</h3>
+                </div>
+                <div class="ip-display" id="ipv6-address">A carregar...</div>
+                <button class="copy-btn" id="copy-ipv6-btn">Copiar IPv6</button>
+                <div class="ip-details" id="ipv6-details">A detetar ligação...</div>
+            </div>
+        </div>
     </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 IPCerto. Todos os direitos reservados.</p>
+    <!-- Rodapé Completo -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">IP<span>Certo</span></div>
+                <p>Identificação de IP pública rápida, segura e transparente.</p>
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2026 IPCerto. Todos os direitos reservados.</p>
+                <p class="tech-stack">Desenvolvido com Cloudflare Pages & Workers</p>
+            </div>
         </div>
     </footer>
 
-    <script type="module" src="./assets/js/main.js"></script>
+    <script src="./assets/js/main.js"></script>
 </body>
 </html>

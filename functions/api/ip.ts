@@ -6,7 +6,7 @@ export interface IpResponse {
 
 export const onRequest: PagesFunction = async (context) => {
   const request = context.request;
-
+  
   const cfConnectingIp = request.headers.get('cf-connecting-ip');
   const xForwardedFor = request.headers.get('x-forwarded-for');
   const xRealIp = request.headers.get('x-real-ip');
@@ -34,7 +34,7 @@ export const onRequest: PagesFunction = async (context) => {
     'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self'; object-src 'none';"
+    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; object-src 'none';"
   };
 
   return new Response(JSON.stringify(responseData, null, 2), {
