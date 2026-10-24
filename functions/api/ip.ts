@@ -32,9 +32,7 @@ export const onRequest: PagesFunction = async (context) => {
     'Access-Control-Allow-Origin': '*',
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; object-src 'none';"
+    'Referrer-Policy': 'strict-origin-when-cross-origin'
   };
 
   return new Response(JSON.stringify(responseData, null, 2), {

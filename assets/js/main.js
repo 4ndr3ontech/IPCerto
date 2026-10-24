@@ -7,46 +7,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ipv6Details = document.getElementById('ipv6-details');
     const copyIpv6Btn = document.getElementById('copy-ipv6-btn');
 
-    // Função para buscar IPv4
-    async function fetchIPv4() {
+    async function fetchClientIp() {
         try {
-            const response = await fetch('https://api.ipify.org?format=json');
-            if (!response.ok) throw new Error('Indisponível');
-            const data = await response.json();
-            ipv4El.textContent = data.ip;
-            ipv4Details.innerHTML = `<p>Protocolo: <strong>IPv4</strong></p><p>Estado: Ativo</p>`;
-        } catch (e) {
-            ipv4El.textContent = 'Não suportado / Indisponível';
-            ipv4Details.innerHTML = `<p style="color: #94a3b8;">Rede configurada apenas em IPv6 ou sem suporte.</p>`;
-        }
-    }
-
-    // Função para buscar IPv6
-    async function fetchIPv6() {
-        try {
-            const response = await fetch('https://api64.ipify.org?format=json');
-            if (!response.ok) throw new Error('Indisponível');
-            const data = await response.json();
+            // Requisição para a nossa rota do Cloudflare Pages /api/ip
+            const response = await fetch('/api/ip');
             
-            if (data.ip.includes(':')) {
-                ipv6El.textContent = data.ip;
-                ipv6Details.innerHTML = `<p>Protocolo: <strong>IPv6</strong></p><p>Estado: Ativo</p>`;
-            } else {
-                throw new Error('Não é IPv6');
+            if (!response.ok) {
+                throw new Error('Falha ao obter IP do servidor.');
             }
-        } catch (e) {
-            ipv6El.textContent = 'Não detetado';
-            ipv6Details.innerHTML = `<p style="color: #94a3b8;">Ligação IPv6 não ativa nesta rede.</p>`;
+
+            const data = await response.json();
+            const ip = data.ip;
+            const version = data.version;
+
+            if (version === 'IPv6' || ip.includes(':')) {
+                ipv6El.textContent = ip;
+                ipv6Details.innerHTML = `Protocolo: <strong>IPv6</strong> • Ativo`;
+                
+                ipv4El.textContent = 'Não detetado nesta rota';
+                ipv4Details.innerHTML = `A ligação atual utiliza IPv6`;
+            } else {
+                ipv4El.textContent = ip;
+                ipv4Details.innerHTML = `Protocolo: <strong>IPv4</strong> • Ativo`;
+                
+                ipv6El.textContent = 'Não detetado nesta rota';
+                ipv6Details.innerHTML = `A ligação atual utiliza IPv4`;
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+            ipv4El.textContent = 'Indisponível';
+            ipv6El.textContent = 'Indisponível';
+            ipv4Details.textContent = 'Erro de comunicação';
+            ipv6Details.textContent = 'Erro de comunicação';
         }
     }
 
-    // Executa as requisições em paralelo
-    await Promise.all([fetchIPv4(), fetchIPv6()]);
+    await fetchClientIp();
 
     // Copiar IPv4
     copyIpv4Btn.addEventListener('click', async () => {
         const text = ipv4El.textContent;
-        if (text.includes('Indisponível') || text.includes('carregar')) return;
+        if (text.includes('Indisponível') || text.includes('carregar') || text.includes('Não detetado')) return;
         await navigator.clipboard.writeText(text);
         copyIpv4Btn.textContent = 'Copiado!';
         setTimeout(() => copyIpv4Btn.textContent = 'Copiar IPv4', 2000);
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Copiar IPv6
     copyIpv6Btn.addEventListener('click', async () => {
         const text = ipv6El.textContent;
-        if (text.includes('detetado') || text.includes('carregar')) return;
+        if (text.includes('Indisponível') || text.includes('carregar') || text.includes('Não detetado')) return;
         await navigator.clipboard.writeText(text);
         copyIpv6Btn.textContent = 'Copiado!';
         setTimeout(() => copyIpv6Btn.textContent = 'Copiar IPv6', 2000);
