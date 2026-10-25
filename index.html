@@ -1,152 +1,370 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPCerto — Qual é o meu IP?</title>
+    <title>IPCerto — Ferramentas de Rede Pro</title>
     
-    <!-- Leaflet CSS para o Mapa -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
-    <!-- Topo / Cabeçalho Profissional -->
-    <header class="navbar">
-        <div class="logo-container">
-            <div class="logo">IP<span>Certo</span></div>
-            <span class="badge">Dual Stack</span>
-        </div>
-        <nav class="nav-links">
-            <a href="#inicio" class="active">Início</a>
-            <a href="#ferramentas">Ferramentas</a>
-            <a href="#sobre">Sobre</a>
-        </nav>
-    </header>
+    <div class="bg-glow"></div>
 
-    <!-- Conteúdo Principal -->
-    <main class="ip-container" id="inicio">
-        <h2>O SEU ENDEREÇO IP PÚBLICO É:</h2>
-        
-        <div class="ip-grid">
-            <!-- Cartão IPv4 -->
-            <div class="ip-card">
-                <div class="card-header">
-                    <span class="protocol-tag ipv4">IPv4</span>
-                    <h3>Endereço Principal</h3>
-                </div>
-                <div class="ip-display" id="ipv4-address">A carregar...</div>
-                <button class="copy-btn" id="copy-ipv4-btn">Copiar IPv4</button>
-                <div class="ip-details" id="ipv4-details">A detetar ligação...</div>
-            </div>
-
-            <!-- Cartão IPv6 -->
-            <div class="ip-card">
-                <div class="card-header">
-                    <span class="protocol-tag ipv6">IPv6</span>
-                    <h3>Endereço Moderno</h3>
-                </div>
-                <div class="ip-display" id="ipv6-address">A carregar...</div>
-                <button class="copy-btn" id="copy-ipv6-btn">Copiar IPv6</button>
-                <div class="ip-details" id="ipv6-details">A detetar ligação...</div>
-            </div>
-        </div>
-
-        <!-- Secção de Informações Adicionais (Dashboard) -->
-        <div class="info-extra">
-            <div class="info-box box-isp">
-                <span class="info-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
-                    Provedor de Internet (ISP)
-                </span>
-                <div class="info-value highlight" id="isp-info" style="margin-bottom: 16px;">A carregar informações...</div>
-                
-                <!-- Nova Caixa Interativa de IP Reverso (DNS PTR) -->
-                <span class="info-label" style="font-size: 0.7rem; color: #64748b;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                    IP Reverso (DNS PTR):
-                </span>
-                <div class="dns-box" id="dns-ptr-info" title="Clique para copiar">A procurar hostname...</div>
+    <div class="app-layout">
+        <!-- Barra Lateral -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                IP<span>Certo</span>
             </div>
             
-            <div class="info-box box-time">
-                <span class="info-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    Data e Hora da Consulta
-                </span>
-                <div class="info-value" id="time-info">A calcular...</div>
+            <nav class="nav-menu">
+                <p class="nav-title">PAINEL PRINCIPAL</p>
+                <button class="nav-item active" data-target="dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
+                    O Meu IP
+                </button>
+                
+                <p class="nav-title">FERRAMENTAS DE REDE</p>
+                <button class="nav-item" data-target="dns-lookup">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                    DNS Lookup
+                </button>
+                <button class="nav-item" data-target="latency">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    Teste de Latência
+                </button>
+                <button class="nav-item" data-target="speedtest">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    Teste sua Conexão
+                </button>
+                <button class="nav-item" data-target="cidr">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line></svg>
+                    Calculadora CIDR
+                </button>
+
+                <p class="nav-title">SEGURANÇA & UTILITÁRIOS</p>
+                <button class="nav-item" data-target="webrtc">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    WebRTC Leak Test
+                </button>
+                <button class="nav-item" data-target="headers">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    HTTP Headers
+                </button>
+                <button class="nav-item" data-target="password-gen">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Gerador de Senhas
+                </button>
+                <button class="nav-item" data-target="base64">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-6-6-6"></path><path d="M12 19h8"></path></svg>
+                    Base64 Tool
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span> Sistemas Operacionais
+                </div>
             </div>
+        </aside>
+
+        <!-- Wrapper Principal -->
+        <div class="content-wrapper">
+            
+            <!-- TOPO / HEADER -->
+            <header class="top-header">
+                <div class="header-content">
+                    <h1 class="page-title" id="dynamic-title">Painel de Diagnóstico</h1>
+                    <div class="ad-placeholder ad-top">
+                        Espaço Reservado - Google AdSense (Responsivo)
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTEÚDO PRINCIPAL (TABS) -->
+            <main class="main-content">
+                
+                <!-- DASHBOARD (O MEU IP) -->
+                <section id="dashboard" class="tab-pane active">
+                    <div class="section-top-row">
+                        <p class="text-muted">Análise em tempo real do seu tráfego de rede.</p>
+                        <div class="clock-badge">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span id="time-info" class="mono">A calcular...</span>
+                        </div>
+                    </div>
+
+                    <div class="ip-grid mt-4">
+                        <div class="premium-card ip-card-pro glow-accent">
+                            <div class="card-head">
+                                <span class="tag ipv4">IPv4</span>
+                                <span class="text-muted text-sm">Principal</span>
+                            </div>
+                            <div class="ip-display-row mt-2">
+                                <span class="mono ip-text" id="ipv4-address">A carregar...</span>
+                                <button class="icon-btn" data-copy="ipv4-address" title="Copiar IPv4">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="premium-card ip-card-pro glow-purple">
+                            <div class="card-head">
+                                <span class="tag ipv6">IPv6</span>
+                                <span class="text-muted text-sm">Moderno</span>
+                            </div>
+                            <div class="ip-display-row mt-2">
+                                <span class="mono ip-text" id="ipv6-address">A carregar...</span>
+                                <button class="icon-btn" data-copy="ipv6-address" title="Copiar IPv6">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="premium-card mt-4 p-0 isp-card-wrapper">
+                        <div class="isp-header">
+                            <div class="isp-icon-box">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                            </div>
+                            <div>
+                                <span class="text-muted text-sm d-block" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">Provedor de Internet (ISP)</span>
+                                <span class="highlight isp-title" id="isp-info">A identificar Provedor...</span>
+                            </div>
+                        </div>
+                        <div class="dns-row" id="dns-ptr-info" data-hostname="">A resolver PTR Record...</div>
+                    </div>
+
+                    <div class="geo-layout mt-4">
+                        <div class="premium-card geo-data">
+                            <h3 class="card-title mb-4" style="font-size: 1rem; font-weight: 600; color: #fff;">Informação Geográfica</h3>
+                            <div class="geo-list">
+                                <div class="geo-item"><span>Cidade</span><span class="mono text-white" id="geo-city">...</span></div>
+                                <div class="geo-item"><span>Região</span><span class="mono text-white" id="geo-region">...</span></div>
+                                <div class="geo-item"><span>País</span><span class="mono text-white" id="geo-country">...</span></div>
+                                <div class="geo-item" style="border: none; padding-bottom: 0;"><span>ASN</span><span class="mono text-white" id="geo-asn">...</span></div>
+                            </div>
+                        </div>
+                        <div class="premium-card p-0 map-wrapper">
+                            <div class="map-header">
+                                <span class="mono" id="geo-coords">📍 A calcular...</span>
+                                <a href="#" id="google-maps-link" target="_blank" class="link">Abrir Maps ↗</a>
+                            </div>
+                            <div id="map"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- DNS LOOKUP -->
+                <section id="dns-lookup" class="tab-pane">
+                    <p class="text-muted">Consulte os registos de qualquer domínio em tempo real.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="dns-domain-input" class="form-control" placeholder="Ex: google.com">
+                            <select id="dns-type-input" class="form-control select-fixed">
+                                <option value="A">A (IPv4)</option>
+                                <option value="AAAA">AAAA (IPv6)</option>
+                                <option value="MX">MX (Email)</option>
+                                <option value="TXT">TXT (SPF)</option>
+                                <option value="NS">NS</option>
+                            </select>
+                            <button id="btn-dns-lookup" class="btn-primary">Consultar</button>
+                        </div>
+                        <pre class="code-block mt-4" id="dns-result-output">Aguardando consulta...</pre>
+                    </div>
+                </section>
+
+                <!-- TESTE DE LATÊNCIA -->
+                <section id="latency" class="tab-pane">
+                    <div class="section-top-row">
+                        <p class="text-muted">Mede o Ping (ms) aos principais backbones globais de DNS.</p>
+                        <button id="btn-run-ping" class="btn-primary pulse-btn">Iniciar Teste</button>
+                    </div>
+                    <div class="latency-grid mt-4">
+                        <div class="premium-card latency-card-pro">
+                            <div class="latency-head">
+                                <span class="latency-dot"></span>
+                                <span class="latency-name">Cloudflare (1.1.1.1)</span>
+                            </div>
+                            <div class="latency-result mono" id="ping-cf">-- ms</div>
+                        </div>
+                        <div class="premium-card latency-card-pro">
+                            <div class="latency-head">
+                                <span class="latency-dot"></span>
+                                <span class="latency-name">Google (8.8.8.8)</span>
+                            </div>
+                            <div class="latency-result mono" id="ping-gg">-- ms</div>
+                        </div>
+                        <div class="premium-card latency-card-pro">
+                            <div class="latency-head">
+                                <span class="latency-dot"></span>
+                                <span class="latency-name">Quad9 (9.9.9.9)</span>
+                            </div>
+                            <div class="latency-result mono" id="ping-q9">-- ms</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TESTE SUA CONEXÃO (SPEEDOMETER) -->
+                <section id="speedtest" class="tab-pane">
+                    <div class="section-top-row">
+                        <p class="text-muted">Mede a velocidade real de Download e Upload da sua conexão.</p>
+                        <button id="btn-run-speedtest" class="btn-primary pulse-btn">Iniciar Teste</button>
+                    </div>
+                    
+                    <div class="premium-card mt-4 text-center speed-container">
+                        <h3 class="text-muted mb-4" id="speed-status" style="font-weight: 500; font-size: 1.1rem;">A aguardar início</h3>
+                        
+                        <div class="gauge-wrapper">
+                            <svg viewBox="0 0 200 110" class="gauge">
+                                <defs>
+                                    <linearGradient id="gradDown" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#38bdf8" />
+                                        <stop offset="100%" stop-color="#818cf8" />
+                                    </linearGradient>
+                                    <linearGradient id="gradUp" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#34d399" />
+                                        <stop offset="100%" stop-color="#10b981" />
+                                    </linearGradient>
+                                </defs>
+                                <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke-width="12" stroke-linecap="round" />
+                                <path class="gauge-progress" id="gauge-bar" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke-width="12" stroke-linecap="round" />
+                            </svg>
+                            <div class="gauge-center">
+                                <span class="speed-val mono" id="speed-live-val">0.0</span>
+                                <span class="speed-unit">Mbps</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid mt-4">
+                        <div class="premium-card ping-card-pro">
+                            <div class="ping-head">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                                <span>Latência</span>
+                            </div>
+                            <div class="ping-result mono" id="speed-ping">-- ms</div>
+                        </div>
+                        <div class="premium-card ping-card-pro">
+                            <div class="ping-head">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                <span>Download</span>
+                            </div>
+                            <div class="ping-result mono" id="speed-down">-- Mbps</div>
+                        </div>
+                        <div class="premium-card ping-card-pro">
+                            <div class="ping-head">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                <span>Upload</span>
+                            </div>
+                            <div class="ping-result mono" id="speed-up">-- Mbps</div>
+                        </div>
+                    </div>
+                    <p class="text-muted text-sm mt-4 text-center" style="opacity: 0.7;">Testes realizados através da rede global da Cloudflare para máxima precisão.</p>
+                </section>
+
+                <!-- CALCULADORA CIDR -->
+                <section id="cidr" class="tab-pane">
+                    <p class="text-muted">Planeamento de redes IPv4.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="cidr-input" class="form-control mono" placeholder="192.168.1.0/24">
+                            <button id="btn-calc-cidr" class="btn-primary">Calcular</button>
+                        </div>
+                        <div class="geo-list mt-4" id="cidr-results">
+                            <div class="geo-item"><span>Endereço de Rede</span><span class="mono text-white">-</span></div>
+                            <div class="geo-item"><span>Máscara (Subnet)</span><span class="mono text-white">-</span></div>
+                            <div class="geo-item"><span>Primeiro Host Útil</span><span class="mono text-white">-</span></div>
+                            <div class="geo-item"><span>Último Host Útil</span><span class="mono text-white">-</span></div>
+                            <div class="geo-item"><span>Endereço Broadcast</span><span class="mono text-white">-</span></div>
+                            <div class="geo-item"><span>Total de Hosts Úteis</span><span class="mono text-accent">-</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WEBRTC LEAK -->
+                <section id="webrtc" class="tab-pane">
+                    <p class="text-muted">Auditoria para detetar fugas de IP real por trás de VPNs.</p>
+                    <div class="premium-card mt-4 text-center py-5">
+                        <button id="btn-test-webrtc" class="btn-primary">Executar Auditoria WebRTC</button>
+                        <div id="webrtc-result" class="mt-4 hidden">
+                            <p class="text-muted mb-2 text-sm">ENDEREÇO LOCAL DETETADO PELO BROWSER:</p>
+                            <span class="mono text-danger ip-text" id="local-ip-display"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- HTTP HEADERS -->
+                <section id="headers" class="tab-pane">
+                    <p class="text-muted">Inspecione os cabeçalhos enviados pelo seu dispositivo.</p>
+                    <div class="premium-card mt-4 p-0">
+                        <pre class="code-block m-0 border-0" id="headers-output" style="border-radius: 12px;">A capturar payloads...</pre>
+                    </div>
+                </section>
+
+                <!-- GERADOR DE SENHAS -->
+                <section id="password-gen" class="tab-pane">
+                    <p class="text-muted">Gere senhas criptograficamente seguras localmente.</p>
+                    <div class="premium-card mt-4">
+                        <div class="ip-display-row mb-4" style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <span class="mono ip-text" id="pwd-output" style="letter-spacing: 2px;">Clique_em_Gerar!</span>
+                            <button class="icon-btn" data-copy="pwd-output" title="Copiar Senha">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                        <div class="input-group" style="align-items: center; justify-content: space-between;">
+                            <div>
+                                <label style="color: var(--text-muted); font-size: 0.85rem; margin-right: 12px;">Tamanho: <span id="pwd-length-val" class="text-white">16</span></label>
+                                <input type="range" id="pwd-length" min="8" max="64" value="16" style="width: 150px; cursor: pointer;">
+                            </div>
+                            <button id="btn-generate-pwd" class="btn-primary">Gerar Nova Senha</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BASE64 -->
+                <section id="base64" class="tab-pane">
+                    <p class="text-muted">Codifique ou decodifique strings em Base64 de forma segura (Offline).</p>
+                    <div class="premium-card mt-4">
+                        <textarea id="base64-input" class="form-control mono" rows="4" placeholder="Insira o texto aqui..."></textarea>
+                        <div class="input-group mt-4 mb-4">
+                            <button id="btn-b64-encode" class="btn-primary" style="flex: 1;">Codificar (Encode)</button>
+                            <button id="btn-b64-decode" class="btn-primary" style="flex: 1; background: #27272a; color: #fff;">Decodificar (Decode)</button>
+                        </div>
+                        <textarea id="base64-output" class="form-control mono" rows="4" placeholder="Resultado aparecerá aqui..." readonly style="background: rgba(255,255,255,0.02);"></textarea>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- RODAPÉ / FOOTER -->
+            <footer class="bottom-footer">
+                <div class="ad-placeholder ad-bottom mb-4">
+                    Espaço Reservado - Google AdSense (Responsivo)
+                </div>
+                
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="logo-icon inline-icon"></div>
+                        <strong>IPCerto Pro</strong> &copy; 2026. Todos os direitos reservados.
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Política de Privacidade</a>
+                        <span class="separator">•</span>
+                        <a href="#">Termos de Uso</a>
+                        <span class="separator">•</span>
+                        <a href="#">Contacto</a>
+                    </div>
+                </div>
+                <p class="text-muted text-sm mt-2 text-center" style="opacity: 0.6;">Desenvolvido com Cloudflare Pages. Ferramentas fornecidas "as is" sem garantias.</p>
+            </footer>
+
         </div>
+    </div>
 
-        <!-- Localização Geográfica Estimada (Geo IP) -->
-        <div class="geo-container">
-            <div class="geo-header">
-                <div>
-                    <h3>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        Localização Geográfica Estimada (Geo IP)
-                    </h3>
-                    <p>Provedor e dados de localização da sua conexão ativa</p>
-                </div>
-                <div class="geo-badges">
-                    <span class="api-badge">API Ativa: ipapi.co</span>
-                </div>
-            </div>
-
-            <!-- Grelha de 6 Informações -->
-            <div class="geo-grid">
-                <div class="geo-card">
-                    <span class="geo-label">Endereço IP Ativo</span>
-                    <span class="geo-val" id="geo-ip">A carregar...</span>
-                </div>
-                <div class="geo-card">
-                    <span class="geo-label">Hostname / DNS</span>
-                    <span class="geo-val" id="geo-hostname">A carregar...</span>
-                </div>
-                <div class="geo-card">
-                    <span class="geo-label">Cidade</span>
-                    <span class="geo-val" id="geo-city">A carregar...</span>
-                </div>
-                <div class="geo-card">
-                    <span class="geo-label">Estado / Região</span>
-                    <span class="geo-val" id="geo-region">A carregar...</span>
-                </div>
-                <div class="geo-card">
-                    <span class="geo-label">País</span>
-                    <span class="geo-val" id="geo-country">A carregar...</span>
-                </div>
-                <div class="geo-card">
-                    <span class="geo-label">Provedor (ISP)</span>
-                    <span class="geo-val" id="geo-isp">A carregar...</span>
-                </div>
-            </div>
-
-            <!-- Mapa OpenStreetMap -->
-            <div class="map-wrapper">
-                <div class="map-header">
-                    <span id="geo-coords">📍 Coordenadas: A calcular...</span>
-                    <a href="#" id="google-maps-link" target="_blank" style="color: #38bdf8; text-decoration: none;">Google Maps »</a>
-                </div>
-                <div id="map"></div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Rodapé -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="logo">IP<span>Certo</span></div>
-                <p>Identificação de IP pública rápida, segura e transparente.</p>
-            </div>
-            <div class="footer-info">
-                <p>&copy; 2026 IPCerto. Todos os direitos reservados.</p>
-                <p class="tech-stack">Desenvolvido com Cloudflare Pages & Workers</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Leaflet JS e Script Principal -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script type="module" src="./assets/js/main.js"></script>
 </body>
 </html>
