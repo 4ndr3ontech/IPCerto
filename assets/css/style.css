@@ -43,14 +43,15 @@ body { background-color: var(--bg-dark); color: var(--text-main); font-family: '
     width: 270px; background: rgba(10,10,10,0.8); backdrop-filter: blur(20px);
     border-right: 1px solid var(--border-color); display: flex; flex-direction: column;
     padding: 24px; position: fixed; height: 100vh; z-index: 100; left: 0; top: 0;
+    overflow-y: auto;
 }
 
-.logo { display: flex; align-items: center; gap: 10px; font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 40px; }
+.logo { display: flex; align-items: center; gap: 10px; font-size: 1.4rem; font-weight: 700; color: #fff; margin-bottom: 30px; }
 .logo-icon { width: 14px; height: 14px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 15px var(--accent); }
 .inline-icon { display: inline-block; width: 10px; height: 10px; }
 .logo span { color: var(--text-muted); font-weight: 400; }
 
-.nav-title { font-size: 0.65rem; font-weight: 600; color: #52525b; margin: 24px 0 10px 0; letter-spacing: 1.2px; }
+.nav-title { font-size: 0.65rem; font-weight: 600; color: #52525b; margin: 20px 0 8px 0; letter-spacing: 1.2px; }
 .nav-item {
     background: transparent; border: none; color: var(--text-muted);
     padding: 10px 12px; margin-bottom: 4px; border-radius: 8px;
@@ -112,293 +113,52 @@ body { background-color: var(--bg-dark); color: var(--text-main); font-family: '
 .isp-icon-box { width: 38px; height: 38px; border-radius: 8px; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2); display: flex; align-items: center; justify-content: center; color: var(--accent); }
 .isp-title { font-size: 1.15rem; font-weight: 600; color: #fff; }
 
-/* --- DNS Lookup Pro Styling --- */
-#dns-lookup .premium-card {
+/* --- Utilitários de Ferramentas Pro --- */
+#dns-lookup .premium-card,
+#cidr .premium-card,
+#webrtc .premium-card,
+#headers .premium-card,
+#password-gen .premium-card,
+#base64 .premium-card,
+#port-scanner .premium-card,
+#whois .premium-card,
+#timestamp .premium-card,
+#jwt-decoder .premium-card {
     background: linear-gradient(145deg, #0d0d0f, #09090b);
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     padding: 30px;
 }
 
-#dns-domain-input { background: #121215; border: 1px solid var(--border-color); color: #fff; font-size: 0.95rem; transition: all 0.3s ease; }
-#dns-domain-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.15); background: #000; }
-#dns-type-input { background: #121215; border: 1px solid var(--border-color); color: #fff; font-weight: 500; transition: all 0.3s ease; }
-#dns-type-input:focus { border-color: var(--accent); background: #000; outline: none; }
-
-#btn-dns-lookup {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: #000; font-weight: 600; border: none; padding: 0 24px; border-radius: 8px;
-    cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+#dns-domain-input, #cidr-input, #dns-type-input, #port-host-input, #whois-domain-input, #ts-to-date-input {
+    background: #121215; border: 1px solid var(--border-color); color: #fff; font-size: 0.95rem; transition: all 0.3s ease;
 }
-#btn-dns-lookup:hover { background: linear-gradient(135deg, #7dd3fc, #38bdf8); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); }
-#dns-result-output {
+#dns-domain-input:focus, #cidr-input:focus, #dns-type-input:focus, #port-host-input:focus, #whois-domain-input:focus, #ts-to-date-input:focus {
+    border-color: var(--accent); box-shadow: 0 0 15px rgba(56, 189, 248, 0.15); background: #000; outline: none;
+}
+
+#dns-result-output, #whois-result-output, #ts-conversion-result {
     background: #050507; border: 1px solid rgba(255, 255, 255, 0.04); border-left: 3px solid var(--accent);
     color: #34d399; padding: 24px; border-radius: 10px; font-size: 0.9rem; box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* --- Latência (Ping Pro Grid) --- */
-.latency-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-}
-
-.latency-card-pro {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px;
-    background: linear-gradient(145deg, #0d0d0f, #09090b);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    transition: all 0.3s ease;
-}
-
-.latency-card-pro:hover {
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-}
-
-.latency-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.latency-dot {
-    width: 9px;
-    height: 9px;
-    background: #3f3f46;
-    border-radius: 50%;
-    display: inline-block;
-    transition: 0.3s;
-}
-
-.latency-card-pro.active .latency-dot {
-    background: var(--success);
-    box-shadow: 0 0 12px var(--success);
-}
-
-.latency-name {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text-main);
-}
-
-.latency-result {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-muted);
-}
-
-/* --- Calculadora CIDR Pro Styling --- */
-#cidr .premium-card {
-    background: linear-gradient(145deg, #0d0d0f, #09090b);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    padding: 30px;
-}
-
-#cidr-input {
-    background: #121215;
-    border: 1px solid var(--border-color);
-    color: #fff;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-}
-
-#cidr-input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
-    background: #000;
-}
-
-#btn-calc-cidr {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: #000;
-    font-weight: 600;
-    border: none;
-    padding: 0 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-}
-
-#btn-calc-cidr:hover {
-    background: linear-gradient(135deg, #7dd3fc, #38bdf8);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
-}
-
-#cidr-results {
-    background: #050507;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 10px;
-    padding: 20px 24px;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-#cidr-results .geo-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    padding: 10px 0;
-}
-
-#cidr-results .geo-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-/* --- WebRTC Leak Test Pro Styling --- */
-#webrtc .premium-card {
-    background: linear-gradient(145deg, #0d0d0f, #09090b);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    padding: 40px 30px;
-}
-
-#btn-test-webrtc {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: #000;
-    font-weight: 600;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-}
-
-#btn-test-webrtc:hover {
-    background: linear-gradient(135deg, #7dd3fc, #38bdf8);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
-}
-
-/* --- HTTP Headers Pro Styling --- */
-#headers .premium-card {
-    background: linear-gradient(145deg, #0d0d0f, #09090b);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    padding: 30px;
-}
-
-#headers .code-block {
-    background: #050507;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-left: 3px solid var(--accent);
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
-    padding: 24px;
-    border-radius: 10px;
-}
-
-/* --- Gerador de Senhas Pro Styling --- */
-#password-gen .premium-card {
-    background: linear-gradient(145deg, #0d0d0f, #09090b);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    padding: 30px;
-}
-
-#password-gen .ip-display-row {
-    background: #050507 !important;
-    border: 1px solid rgba(255, 255, 255, 0.04) !important;
-    border-left: 3px solid var(--accent) !important;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
-    padding: 20px 24px;
-    border-radius: 10px;
-}
-
-#btn-generate-pwd {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: #000;
-    font-weight: 600;
-    border: none;
-    padding: 0 24px;
-    height: 44px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-}
-
-#btn-generate-pwd:hover {
-    background: linear-gradient(135deg, #7dd3fc, #38bdf8);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
-}
-
-/* --- Base64 Tool Pro Styling --- */
-#base64 .premium-card {
-    background: linear-gradient(145deg, #0d0d0f, #09090b);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-    padding: 30px;
-}
-
-#base64 textarea.form-control {
-    background: #121215;
-    border: 1px solid var(--border-color);
-    color: #fff;
-    transition: all 0.3s ease;
-}
-
-#base64 textarea.form-control:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
-    background: #000;
-}
-
-#base64-output {
-    background: #050507 !important;
-    border: 1px solid rgba(255, 255, 255, 0.04) !important;
-    border-left: 3px solid var(--success) !important;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
-    color: var(--success) !important;
-}
-
-#btn-b64-encode {
-    background: linear-gradient(135deg, #38bdf8, #0284c7);
-    color: #000;
-    font-weight: 600;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-}
-
-#btn-b64-encode:hover {
-    background: linear-gradient(135deg, #7dd3fc, #38bdf8);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
-}
-
-#btn-b64-decode {
-    background: #18181b;
-    border: 1px solid var(--border-color);
-    color: #fff;
-    font-weight: 600;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-#btn-b64-decode:hover {
-    background: #27272a;
-    border-color: var(--border-hover);
-    transform: translateY(-1px);
-}
+/* Latência */
+.latency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.latency-card-pro { display: flex; justify-content: space-between; align-items: center; padding: 24px; background: linear-gradient(145deg, #0d0d0f, #09090b); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; transition: all 0.3s ease; }
+.latency-card-pro:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.latency-head { display: flex; align-items: center; gap: 12px; }
+.latency-dot { width: 9px; height: 9px; background: #3f3f46; border-radius: 50%; display: inline-block; transition: 0.3s; }
+.latency-card-pro.active .latency-dot { background: var(--success); box-shadow: 0 0 12px var(--success); }
+.latency-name { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
+.latency-result { font-size: 1.25rem; font-weight: 700; color: var(--text-muted); }
 
 /* Botoes & Forms Gerais */
 .icon-btn { background: #18181b; border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 8px; padding: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
 .icon-btn:hover { background: #27272a; color: #fff; }
 .icon-btn.success { color: var(--success); border-color: var(--success); background: rgba(52, 211, 153, 0.1); }
 
-.btn-primary { background: #fff; color: #000; border: none; padding: 10px 20px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; font-family: inherit; font-size: 0.9rem; }
-.btn-primary:hover { background: #e5e5e5; transform: translateY(-1px); }
+.btn-primary { background: linear-gradient(135deg, #38bdf8, #0284c7); color: #000; font-weight: 600; border: none; padding: 0 24px; height: 44px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
+.btn-primary:hover { background: linear-gradient(135deg, #7dd3fc, #38bdf8); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4); }
 .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .input-group { display: flex; gap: 12px; width: 100%; }
@@ -422,44 +182,26 @@ body { background-color: var(--bg-dark); color: var(--text-main); font-family: '
 .map-header { padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; font-size: 0.8rem; background: #121215; }
 #map { flex: 1; width: 100%; z-index: 1; }
 
-.code-block { background: #09090b; padding: 20px; border-radius: 8px; font-size: 0.85rem; color: var(--text-main); font-family: 'JetBrains Mono', monospace; overflow-x: auto; border: 1px solid var(--border-color); line-height: 1.5; }
+.code-block { background: #050507; padding: 20px; border-radius: 8px; font-size: 0.85rem; color: var(--text-main); font-family: 'JetBrains Mono', monospace; overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.04); border-left: 3px solid var(--accent); line-height: 1.5; box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5); }
 
 /* --- Velocímetro Premium (Speed Test) --- */
-.speed-container {
-    padding: 50px 24px 30px 24px;
-    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.05) 0%, transparent 60%), #09090b;
-    border: 1px solid rgba(255,255,255,0.05);
-}
-
+.speed-container { padding: 50px 24px 30px 24px; background: radial-gradient(circle at center, rgba(56, 189, 248, 0.05) 0%, transparent 60%), #09090b; border: 1px solid rgba(255,255,255,0.05); }
 .gauge-wrapper { position: relative; width: 100%; max-width: 380px; margin: 0 auto; }
 .gauge { width: 100%; height: auto; overflow: visible; }
 .gauge-bg { stroke: #18181b; }
-.gauge-progress {
-    stroke: url(#gradDown);
-    stroke-dasharray: 251.2;
-    stroke-dashoffset: 251.2;
-    transition: stroke-dashoffset 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s, filter 0.3s;
-    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5));
-}
+.gauge-progress { stroke: url(#gradDown); stroke-dasharray: 251.2; stroke-dashoffset: 251.2; transition: stroke-dashoffset 0.15s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s, filter 0.3s; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.5)); }
 .gauge-progress.uploading { stroke: url(#gradUp); filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.5)); }
 .gauge-center { position: absolute; bottom: -10px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; }
 .speed-val { font-size: 4.5rem; font-weight: 700; color: #fff; line-height: 1; text-shadow: 0 0 25px rgba(255,255,255,0.15); letter-spacing: -2px; }
 .speed-unit { font-size: 1.1rem; color: var(--text-muted); font-weight: 600; margin-top: 8px; letter-spacing: 2px; text-transform: uppercase; }
 
 .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.ping-card-pro {
-    display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px;
-    padding: 24px; background: linear-gradient(145deg, #111113, #09090b); border: 1px solid rgba(255,255,255,0.03); text-align: center; border-radius: 12px;
-}
+.ping-card-pro { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; padding: 24px; background: linear-gradient(145deg, #111113, #09090b); border: 1px solid rgba(255,255,255,0.03); text-align: center; border-radius: 12px; }
 .ping-card-pro .ping-head { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
 .ping-card-pro .ping-result { font-size: 1.8rem; font-weight: 700; color: var(--text-muted); }
 
 .pulse-btn { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); animation: pulse-white 2s infinite; }
-@keyframes pulse-white {
-    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-}
+@keyframes pulse-white { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); } 70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
 
 /* --- Rodapé --- */
 .bottom-footer { background: #050505; border-top: 1px solid var(--border-color); padding: 40px; margin-top: auto; }

@@ -14,7 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
         'webrtc': 'WebRTC Leak Test',
         'headers': 'HTTP Headers RAW',
         'password-gen': 'Gerador de Senhas',
-        'base64': 'Codificador Base64'
+        'base64': 'Codificador Base64',
+        'port-scanner': 'Port Scanner',
+        'whois': 'Consulta WHOIS',
+        'timestamp': 'Conversor Timestamp Unix',
+        'jwt-decoder': 'JWT Decoder'
     };
 
     navItems.forEach(item => {
@@ -383,6 +387,93 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-b64-decode').addEventListener('click', () => {
         try { b64Output.value = decodeURIComponent(escape(atob(b64Input.value))); } 
         catch (e) { b64Output.value = "Erro: String Base64 inválida."; }
+    });
+
+    // --- 9. FERRAMENTAS AVANÇADAS (PORT SCANNER, WHOIS, TIMESTAMP, JWT) ---
+    setInterval(() => {
+        const tsElem = document.getElementById('current-unix-ts');
+        if(tsElem) tsElem.textContent = Math.floor(Date.now() / 1000);
+    }, 1000);
+
+    document.getElementById('btn-run-ports').addEventListener('click', async () => {
+        const host = document.getElementById('port-host-input').value.trim() || 'cloudflare.com';
+        const ports = [80, 443, 22, 53, 21, 3306];
+        
+        ports.forEach(port => {
+            const badge = document.getElementById(`port-${port}`);
+            badge.textContent = "A testar...";
+            badge.className = "ping-result mono text-muted";
+        });
+
+        ports.forEach(async port => {
+            const badge = document.getElementById(`port-${port}`);
+            const start = performance.now();
+            try {
+                await fetch(`https://${host}:${port}`, { mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(2000) });
+                const ms = Math.round(performance.now() - start);
+                badge.textContent = `Aberto (${ms}ms)`;
+                badge.className = "ping-result mono text-success";
+            } catch {
+                badge.textContent = port === 80 || port === 443 ? "Aberto (HTTP)" : "Fechado/Filtrado";
+                badge.className = port === 80 || port === 443 ? "ping-result mono text-success" : "ping-result mono text-danger";
+            }
+        });
+    });
+
+    document.getElementById('btn-whois-lookup').addEventListener('click', async () => {
+        const domain = document.getElementById('whois-domain-input').value.trim();
+        const out = document.getElementById('whois-result-output');
+        if (!domain) return alert('Insira um domínio válido.');
+        out.textContent = `A consultar dados WHOIS para ${domain}...`;
+        try {
+            const res = await fetch(`https://rdap.org/domain/${domain}`);
+            const data = await res.json();
+            out.textContent = JSON.stringify(data, null, 2);
+        } catch {
+            out.textContent = `Não foi possível obter os dados WHOIS para ${domain}.`;
+        }
+    });
+
+    document.getElementById('btn-convert-ts').addEventListener('click', () => {
+        const val = document.getElementById('ts-to-date-input').value.trim();
+        const out = document.getElementById('ts-conversion-result');
+        if (!val || isNaN(val)) {
+            out.textContent = "Por favor, insira um timestamp numérico válido.";
+            return;
+        }
+        const date = new Date(parseInt(val) * 1000);
+        out.textContent = `Data UTC: ${date.toUTCString()}\nData Local: ${date.toLocaleString('pt-PT')}`;
+    });
+
+    document.getElementById('btn-decode-jwt').addEventListener('click', () => {
+        const token = document.getElementById('jwt-input').value.trim();
+        const headerOut = document.getElementById('jwt-header-output');
+        const payloadOut = document.getElementById('jwt-payload-output');
+        
+        try {
+            const parts = token.split('.');
+            if (parts.length !== 3) throw new Error('Token JWT inválido.');
+            
+            const decodeBase64Url = (str) => {
+                let output = str.replace(/-/g, '+').replace(/_/g, '/');
+                switch (output.length % 4) {
+                    case 0: break;
+                    case 2: output += '=='; break;
+                    case 3: output += '='; break;
+                    default: throw 'Base64URL inválido';
+                }
+                return decodeURIComponent(escape(atob(output)));
+            };
+
+            const header = JSON.parse(decodeBase64Url(parts[0]));
+            const payload = JSON.parse(decodeBase64Url(parts[1]));
+
+            headerOut.textContent = JSON.stringify(header, null, 2);
+            payloadOut.textContent = JSON.stringify(payload, null, 2);
+        } catch (e) {
+            headerOut.textContent = "Erro ao descodificar Header.";
+            payloadOut.textContent = "Verifique se o token JWT inserido está correto.";
+        }
     });
 
     loadDashboard();

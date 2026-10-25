@@ -62,6 +62,24 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-6-6-6"></path><path d="M12 19h8"></path></svg>
                     Base64 Tool
                 </button>
+
+                <p class="nav-title">FERRAMENTAS AVANÇADAS</p>
+                <button class="nav-item" data-target="port-scanner">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                    Port Scanner
+                </button>
+                <button class="nav-item" data-target="whois">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    WHOIS / Domínio
+                </button>
+                <button class="nav-item" data-target="timestamp">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Timestamp Unix
+                </button>
+                <button class="nav-item" data-target="jwt-decoder">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                    JWT Decoder
+                </button>
             </nav>
             <div class="sidebar-footer">
                 <div class="status-indicator">
@@ -334,6 +352,79 @@
                             <button id="btn-b64-decode" class="btn-primary" style="flex: 1; background: #27272a; color: #fff;">Decodificar (Decode)</button>
                         </div>
                         <textarea id="base64-output" class="form-control mono" rows="4" placeholder="Resultado aparecerá aqui..." readonly style="background: rgba(255,255,255,0.02);"></textarea>
+                    </div>
+                </section>
+
+                <!-- PORT SCANNER -->
+                <section id="port-scanner" class="tab-pane">
+                    <p class="text-muted">Verifique o estado das portas essenciais em qualquer host ou IP.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="port-host-input" class="form-control" placeholder="Ex: google.com">
+                            <button id="btn-run-ports" class="btn-primary">Verificar Portas</button>
+                        </div>
+                        <div class="metrics-grid mt-4" id="port-results-grid">
+                            <div class="premium-card ping-card-pro"><span class="text-muted">HTTP (80)</span><span class="ping-result mono text-muted" id="port-80">--</span></div>
+                            <div class="premium-card ping-card-pro"><span class="text-muted">HTTPS (443)</span><span class="ping-result mono text-muted" id="port-443">--</span></div>
+                            <div class="premium-card ping-card-pro"><span class="text-muted">SSH (22)</span><span class="ping-result mono text-muted" id="port-22">--</span></div>
+                            <div class="premium-card ping-card-pro"><span class="text-muted">DNS (53)</span><span class="ping-result mono text-muted" id="port-53">--</span></div>
+                            <div class="premium-card ping-card-pro"><span class="text-muted">FTP (21)</span><span class="ping-result mono text-muted" id="port-21">--</span></div>
+                            <div class="premium-card ping-card-pro"><span class="text-muted">MySQL (3306)</span><span class="ping-result mono text-muted" id="port-3306">--</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- WHOIS LOOKUP -->
+                <section id="whois" class="tab-pane">
+                    <p class="text-muted">Consulte informações públicas de registo de domínios.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="whois-domain-input" class="form-control" placeholder="Ex: cloudflare.com">
+                            <button id="btn-whois-lookup" class="btn-primary">Consultar WHOIS</button>
+                        </div>
+                        <pre class="code-block mt-4" id="whois-result-output">Aguardando consulta...</pre>
+                    </div>
+                </section>
+
+                <!-- TIMESTAMP UNIX -->
+                <section id="timestamp" class="tab-pane">
+                    <p class="text-muted">Converta datas legíveis em Timestamp Unix e vice-versa instantaneamente.</p>
+                    <div class="premium-card mt-4">
+                        <div class="ip-display-row mb-4" style="background: #050507; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <div>
+                                <span class="text-muted text-sm d-block">TIMESTAMP ATUAL (UTC)</span>
+                                <span class="mono ip-text text-accent" id="current-unix-ts">0000000000</span>
+                            </div>
+                            <button class="icon-btn" data-copy="current-unix-ts" title="Copiar Timestamp">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                        <div class="input-group mb-4">
+                            <input type="text" id="ts-to-date-input" class="form-control mono" placeholder="Insira o Timestamp (ex: 1770000000)">
+                            <button id="btn-convert-ts" class="btn-primary">Converter para Data</button>
+                        </div>
+                        <pre class="code-block" id="ts-conversion-result">Resultado da conversão aparecerá aqui...</pre>
+                    </div>
+                </section>
+
+                <!-- JWT DECODER -->
+                <section id="jwt-decoder" class="tab-pane">
+                    <p class="text-muted">Descodifique o Header e o Payload de um JSON Web Token localmente.</p>
+                    <div class="premium-card mt-4">
+                        <textarea id="jwt-input" class="form-control mono" rows="3" placeholder="Insira o token JWT aqui (eyJhbGci...)"></textarea>
+                        <div class="mt-4 mb-4">
+                            <button id="btn-decode-jwt" class="btn-primary">Descodificar Token</button>
+                        </div>
+                        <div class="geo-layout" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div>
+                                <span class="text-muted text-sm mb-2 d-block">HEADER</span>
+                                <pre class="code-block m-0" id="jwt-header-output" style="min-height: 150px;">Aguardando token...</pre>
+                            </div>
+                            <div>
+                                <span class="text-muted text-sm mb-2 d-block">PAYLOAD</span>
+                                <pre class="code-block m-0" id="jwt-payload-output" style="min-height: 150px;">Aguardando token...</pre>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
