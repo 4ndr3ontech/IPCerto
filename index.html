@@ -15,9 +15,9 @@
     <div class="app-layout">
         <!-- Barra Lateral -->
         <aside class="sidebar">
-            <div class="logo">
+            <div class="logo" id="site-logo" title="Voltar ao início" style="cursor: pointer;">
                 <div class="logo-icon"></div>
-                IP<span>Certo</span>
+                <span class="logo-text">IP<span class="logo-highlight">Certo</span><span class="logo-exclam">!</span></span>
             </div>
             
             <nav class="nav-menu">
@@ -79,6 +79,20 @@
                 <button class="nav-item" data-target="jwt-decoder">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
                     JWT Decoder
+                </button>
+
+                <p class="nav-title">INFORMAÇÕES</p>
+                <button class="nav-item" data-target="privacy">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Política de Privacidade
+                </button>
+                <button class="nav-item" data-target="terms">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    Termos de Uso
+                </button>
+                <button class="nav-item" data-target="contact">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    Contacto
                 </button>
             </nav>
             <div class="sidebar-footer">
@@ -428,28 +442,93 @@
                     </div>
                 </section>
 
+                <!-- POLÍTICA DE PRIVACIDADE -->
+                <section id="privacy" class="tab-pane">
+                    <div class="premium-card">
+                        <h2 class="text-white mb-4" style="font-size: 1.25rem;">Política de Privacidade</h2>
+                        <div class="text-muted" style="font-size: 0.9rem; line-height: 1.7; display: flex; flex-direction: column; gap: 16px;">
+                            <p>A sua privacidade é de extrema importância para nós no <strong>IPCerto Pro</strong>. Esta Política de Privacidade descreve como recolhemos, utilizamos e protegemos as informações quando utiliza o nosso painel de diagnóstico de rede.</p>
+                            
+                            <h3 class="text-white" style="font-size: 1rem; margin-top: 10px;">1. Recolha de Dados</h3>
+                            <p>O IPCerto Pro opera maioritariamente do lado do cliente (browser). Os endereços IP e dados geográficos apresentados são obtidos através de consultas diretas a APIs públicas de geolocalização e não são armazenados de forma permanente em bases de dados próprias.</p>
+
+                            <h3 class="text-white" style="font-size: 1rem; margin-top: 10px;">2. Cookies e Anúncios</h3>
+                            <p>Podemos utilizar serviços de terceiros, como o Google AdSense, para exibir anúncios relevantes. Estes fornecedores podem utilizar cookies para exibir anúncios com base nas suas visitas anteriores a este ou a outros websites na Internet.</p>
+
+                            <h3 class="text-white" style="font-size: 1rem; margin-top: 10px;">3. Segurança</h3>
+                            <p>Implementamos medidas de segurança robustas para proteger as ferramentas utilitárias executadas na aplicação (como o gerador de senhas e descodificadores), que processam dados de forma estritamente local no seu dispositivo.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TERMOS DE USO -->
+                <section id="terms" class="tab-pane">
+                    <div class="premium-card">
+                        <h2 class="text-white mb-4" style="font-size: 1.25rem;">Termos de Uso</h2>
+                        <div class="text-muted" style="font-size: 0.9rem; line-height: 1.7; display: flex; flex-direction: column; gap: 16px;">
+                            <p>Ao aceder e utilizar o <strong>IPCerto Pro</strong>, concorda expressamente com os seguintes termos e condições de utilização.</p>
+                            
+                            <h3 class="text-white" style="font-size: 1rem; margin-top: 10px;">1. Utilização das Ferramentas</h3>
+                            <p>As ferramentas disponibilizadas neste painel (incluindo Port Scanner, DNS Lookup e testes de velocidade) destinam-se exclusivamente a fins de diagnóstico legítimo de rede, auditoria própria e educação técnica.</p>
+
+                            <h3 class="text-white" style="font-size: 1rem; margin-top: 10px;">2. Isenção de Garantias ("As Is")</h3>
+                            <p>O serviço é fornecido "no estado em que se encontra" (as is), sem garantias de qualquer tipo, expressas ou implícitas. Não nos responsabilizamos por quaisquer interrupções de serviço ou imprecisões nas respostas de APIs externas.</p>
+
+                            <h3 class="text-white" style="font-size: 1rem; margin-top: 10px;">3. Uso Aceitável</h3>
+                            <p>É estritamente proibido utilizar as ferramentas de varrimento (Port Scanner ou DNS) contra redes ou sistemas para os quais não possui autorização explícita.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTACTO -->
+                <section id="contact" class="tab-pane">
+                    <div class="premium-card">
+                        <h2 class="text-white mb-4" style="font-size: 1.25rem;">Contacto & Suporte</h2>
+                        <p class="text-muted mb-4" style="font-size: 0.9rem;">Tem alguma sugestão, reportou um bug ou deseja entrar em contacto connosco? Preencha os dados abaixo ou envie-nos um email.</p>
+                        
+                        <form id="contact-form" style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
+                            <div>
+                                <label class="text-muted text-sm mb-2 d-block">O SEU NOME</label>
+                                <input type="text" id="contact-name" class="form-control" placeholder="Insira o seu nome" required>
+                            </div>
+                            <div>
+                                <label class="text-muted text-sm mb-2 d-block">O SEU EMAIL</label>
+                                <input type="email" id="contact-email" class="form-control" placeholder="exemplo@dominio.com" required>
+                            </div>
+                            <div>
+                                <label class="text-muted text-sm mb-2 d-block">MENSAGEM</label>
+                                <textarea id="contact-msg" class="form-control" rows="4" placeholder="Escreva a sua mensagem..." required></textarea>
+                            </div>
+                            <button type="submit" id="btn-send-contact" class="btn-primary" style="width: fit-content; padding: 0 30px;">Enviar Mensagem</button>
+                        </form>
+                        <div id="contact-feedback" class="mt-4 hidden" style="padding: 12px 18px; border-radius: 8px; font-size: 0.85rem; max-width: 600px;"></div>
+                    </div>
+                </section>
+
             </main>
 
             <!-- RODAPÉ / FOOTER -->
             <footer class="bottom-footer">
-                <div class="ad-placeholder ad-bottom mb-4">
-                    Espaço Reservado - Google AdSense (Responsivo)
-                </div>
-                
-                <div class="footer-content">
-                    <div class="footer-brand">
-                        <div class="logo-icon inline-icon"></div>
-                        <strong>IPCerto Pro</strong> &copy; 2026. Todos os direitos reservados.
+                <div class="footer-inner">
+                    <div class="ad-placeholder ad-bottom">
+                        Espaço Reservado - Google AdSense (Responsivo)
                     </div>
-                    <div class="footer-links">
-                        <a href="#">Política de Privacidade</a>
-                        <span class="separator">•</span>
-                        <a href="#">Termos de Uso</a>
-                        <span class="separator">•</span>
-                        <a href="#">Contacto</a>
+                    
+                    <div class="footer-content">
+                        <div class="footer-brand">
+                            <div class="logo-icon inline-icon"></div>
+                            <strong>IPCerto Pro</strong> &copy; 2026. Todos os direitos reservados.
+                        </div>
+                        <div class="footer-links">
+                            <a href="#" class="footer-nav-link" data-target="privacy">Política de Privacidade</a>
+                            <span class="separator">•</span>
+                            <a href="#" class="footer-nav-link" data-target="terms">Termos de Uso</a>
+                            <span class="separator">•</span>
+                            <a href="#" class="footer-nav-link" data-target="contact">Contacto</a>
+                        </div>
                     </div>
+                    <p class="footer-disclaimer">Desenvolvido com Cloudflare Pages. Ferramentas fornecidas "as is" sem garantias.</p>
                 </div>
-                <p class="text-muted text-sm mt-2 text-center" style="opacity: 0.6;">Desenvolvido com Cloudflare Pages. Ferramentas fornecidas "as is" sem garantias.</p>
             </footer>
 
         </div>
