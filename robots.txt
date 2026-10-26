@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-
-Sitemap: https://ipcerto.com/sitemap.xml
+Sitemap: https://ipcerto.com.br/sitemap.xml
