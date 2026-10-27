@@ -175,6 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ipv6Elem) ipv6Elem.textContent = 'Localhost (Loopback)'; 
         }
 
+        // --- SISTEMA ROBUSTO DE GEOLOCALIZAÇÃO COM FALLBACK ---
+        let geoData = null;
         try {
             let geoUrl = 'https://ipapi.co/json/';
             const ipv4Elem = document.getElementById('ipv4-address');
@@ -182,8 +184,34 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ipVal && !ipVal.includes('Indisp')) geoUrl = `https://ipapi.co/${ipVal}/json/`;
 
             const geoRes = await fetch(geoUrl);
-            const geoData = await geoRes.json();
+            if (geoRes.ok) {
+                geoData = await geoRes.json();
+            }
+        } catch (err) {
+            console.warn('API principal de geo bloqueada ou indisponível, a tentar alternativa...');
+        }
 
+        if (!geoData || !geoData.latitude) {
+            try {
+                const altRes = await fetch('https://ipwho.is/');
+                const altData = await altRes.json();
+                if (altData && altData.success) {
+                    geoData = {
+                        org: altData.connection?.isp || altData.connection?.org,
+                        asn: altData.connection?.asn ? `AS${altData.connection.asn}` : '-',
+                        city: altData.city,
+                        region: altData.region,
+                        country_name: altData.country,
+                        latitude: altData.latitude,
+                        longitude: altData.longitude
+                    };
+                }
+            } catch (altErr) {
+                console.error('Todas as APIs de geolocalização foram bloqueadas ou falharam:', altErr);
+            }
+        }
+
+        if (geoData) {
             const ispInfo = document.getElementById('isp-info');
             const geoCity = document.getElementById('geo-city');
             const geoRegion = document.getElementById('geo-region');
@@ -204,17 +232,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const mapEl = document.getElementById('map');
                 if (mapEl) {
+                    if (window._ipcertoMap) {
+                        window._ipcertoMap.remove();
+                    }
                     const map = L.map('map').setView([geoData.latitude, geoData.longitude], 12);
+                    window._ipcertoMap = map;
+
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
                     const customIcon = L.icon({
                         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                         iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
                     });
-                    L.marker([geoData.latitude, geoData.longitude], {icon: customIcon}).addTo(map).bindPopup(`<b>${geoData.city}</b>`).openPopup();
+                    L.marker([geoData.latitude, geoData.longitude], {icon: customIcon}).addTo(map).bindPopup(`<b>${geoData.city || 'Localização'}</b>`).openPopup();
                 }
             }
-        } catch (e) { console.error(e); }
+        } else {
+            const geoCoords = document.getElementById('geo-coords');
+            if (geoCoords) geoCoords.textContent = '📍 Indisponível (Bloqueado por extensão/rede)';
+        }
 
         try {
             const ipv4Elem = document.getElementById('ipv4-address');
