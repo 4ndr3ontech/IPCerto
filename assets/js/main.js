@@ -1,5 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // --- MENU HAMBÚRGUER MOBILE (INTEGRADO COM SEGURANÇA) ---
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (hamburgerBtn && sidebar) {
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        // Fechar o menu automaticamente ao clicar numa opção no telemóvel
+        const mobileNavItems = sidebar.querySelectorAll('.nav-item, .logo');
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+    }
+
     // --- 1. GESTÃO DE TABS E TÍTULO DINÂMICO ---
     const navItems = document.querySelectorAll('.nav-item');
     const tabPanes = document.querySelectorAll('.tab-pane');
