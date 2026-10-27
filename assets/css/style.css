@@ -392,3 +392,19 @@ body { background-color: var(--bg-dark); color: var(--text-main); font-family: '
         text-align: center; 
     }
 }
+
+/* =========================================
+   CORREÇÃO DO TEMA: TIMESTAMP UNIX CLARO
+   ========================================= */
+#timestamp .ip-display-row {
+    background: #f8fafc !important; /* Transforma o fundo preto em cinza claro elegante */
+    border: 1px solid var(--border-color) !important;
+}
+
+#timestamp .ip-display-row .text-muted {
+    color: var(--text-muted) !important; /* Assegura a visibilidade correta do rótulo */
+}
+
+#timestamp .ip-display-row .text-accent {
+    color: var(--accent) !important; /* Mantém o destaque correto no número atual */
+}
