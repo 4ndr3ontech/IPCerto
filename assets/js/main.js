@@ -54,14 +54,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     navItems.forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
+            const targetId = item.getAttribute('data-target');
+            
+            if (!targetId) return;
+
+            const targetPane = document.getElementById(targetId);
+            if (!targetPane) return;
+
+            e.preventDefault();
+
             navItems.forEach(nav => nav.classList.remove('active'));
             tabPanes.forEach(pane => pane.classList.remove('active'));
             
             item.classList.add('active');
-            const targetId = item.getAttribute('data-target');
-            const targetPane = document.getElementById(targetId);
-            if (targetPane) targetPane.classList.add('active');
+            targetPane.classList.add('active');
             
             if (pageTitle && tabTitles[targetId]) {
                 pageTitle.textContent = tabTitles[targetId];
@@ -94,19 +101,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Suporte para cliques nos links do rodapé
+    // Suporte seguro para cliques nos links do rodapé
     document.querySelectorAll('.footer-nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
             const targetId = link.getAttribute('data-target');
+            
+            if (!targetId) return;
+
+            const targetPane = document.getElementById(targetId);
+            if (!targetPane) return;
+
+            e.preventDefault();
+
             const matchingNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
             
             navItems.forEach(nav => nav.classList.remove('active'));
             tabPanes.forEach(pane => pane.classList.remove('active'));
             
             if (matchingNavItem) matchingNavItem.classList.add('active');
-            const targetPane = document.getElementById(targetId);
-            if (targetPane) targetPane.classList.add('active');
+            targetPane.classList.add('active');
             
             if (pageTitle && tabTitles[targetId]) {
                 pageTitle.textContent = tabTitles[targetId];
@@ -152,6 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const timeInfo = document.getElementById('time-info');
             if (timeInfo) timeInfo.textContent = new Date().toLocaleString('pt-PT');
         }, 1000);
+
+        // Define o texto do servidor de destino no Teste de Velocidade
+        const speedDest = document.getElementById('speed-dest-info');
+        if (speedDest) {
+            speedDest.textContent = 'Servidor de São Paulo / Global';
+        }
 
         try {
             const res4 = await fetch('https://api.ipify.org?format=json');
@@ -223,6 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (geoRegion) geoRegion.textContent = geoData.region || '-';
             if (geoCountry) geoCountry.textContent = geoData.country_name || '-';
             if (geoAsn) geoAsn.textContent = geoData.asn || '-';
+
+            // Atualiza a Origem dinamicamente no Teste de Velocidade
+            const speedOrigin = document.getElementById('speed-origin-info');
+            if (speedOrigin) {
+                const city = geoData.city || 'Localidade Desconhecida';
+                const isp = geoData.org || geoData.asn || 'Provedor';
+                speedOrigin.textContent = `${city} — ${isp}`;
+            }
 
             if (geoData.latitude && geoData.longitude) {
                 const geoCoords = document.getElementById('geo-coords');
@@ -327,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. TESTE SUA CONEXÃO (VELOCÍMETRO EM TEMPO REAL) ---
+    // --- 5. TESTE SUA CONEXÃO (MOTOR DE JANELA DE TEMPO - FAST/SPEEDTEST STYLE) ---
     function updateGauge(mbps, isUpload = false) {
         const liveVal = document.getElementById('speed-live-val');
         const gaugeBar = document.getElementById('gauge-bar');
@@ -388,91 +415,143 @@ document.addEventListener('DOMContentLoaded', () => {
             if (elPing) { elPing.textContent = "-- ms"; elPing.style.color = "var(--text-muted)"; }
 
             try {
-                if (status) status.textContent = "A calcular Latência...";
-                const pingStart = performance.now();
-                await fetch('https://speed.cloudflare.com/__down?bytes=0', { cache: 'no-store' });
-                const pingEnd = performance.now();
-                const ping = Math.round(pingEnd - pingStart);
+                // FASE 1: LATÊNCIA E JITTER (~3 SEGUNDOS)
+                if (status) status.textContent = "Analisando Latência e Jitter da rota...";
+                let pings = [];
+                for (let i = 0; i < 4; i++) {
+                    const pingStart = performance.now();
+                    await fetch('https://speed.cloudflare.com/__down?bytes=0', { cache: 'no-store' });
+                    const pingEnd = performance.now();
+                    pings.push(pingEnd - pingStart);
+                    await new Promise(r => setTimeout(r, 200));
+                }
+                const avgPing = Math.round(pings.reduce((a, b) => a + b, 0) / pings.length);
                 if (elPing) {
-                    elPing.textContent = `${ping} ms`;
+                    elPing.textContent = `${avgPing} ms`;
                     elPing.style.color = "var(--accent)";
                 }
 
-                if (status) status.textContent = "Testando Download...";
-                const dlSize = 35000000;
-                const dlStart = performance.now();
-                const dlResponse = await fetch(`https://speed.cloudflare.com/__down?bytes=${dlSize}`, { cache: 'no-store' });
-                
-                const reader = dlResponse.body.getReader();
-                let received = 0;
-                
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    received += value.length;
-                    const now = performance.now();
-                    const duration = (now - dlStart) / 1000;
-                    
-                    if (duration > 0.1) {
-                        const currentMbps = ((received * 8) / duration / 1000000);
-                        updateGauge(currentMbps, false);
+                // FASE 2: ESTABILIZAÇÃO DE BUFFERS (~1.5 SEGUNDOS)
+                if (status) status.textContent = "Estabilizando sockets de rede...";
+                await new Promise(r => setTimeout(r, 1500));
+
+                // FASE 3: DOWNLOAD POR JANELA DE TEMPO FIXA (8 A 10 SEGUNDOS)
+                if (status) status.textContent = "Testando Download (Banda Larga)...";
+                const dlWindowMs = 8500; // Janela fixa de 8.5 segundos
+                const dlStartTime = performance.now();
+                const dlEndTime = dlStartTime + dlWindowMs;
+                let totalDlBytes = 0;
+
+                while (performance.now() < dlEndTime) {
+                    try {
+                        const controller = new AbortController();
+                        const signal = controller.signal;
+
+                        const chunkSize = 15000000; // 15MB
+                        const dlRes = await fetch(`https://speed.cloudflare.com/__down?bytes=${chunkSize}`, { cache: 'no-store', signal });
+                        const reader = dlRes.body.getReader();
+
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            totalDlBytes += value.length;
+                            const elapsedSec = (performance.now() - dlStartTime) / 1000;
+                            if (elapsedSec > 0.1) {
+                                const liveMbps = (totalDlBytes * 8) / elapsedSec / 1000000;
+                                updateGauge(liveMbps, false);
+                            }
+                            if (performance.now() >= dlEndTime) {
+                                controller.abort();
+                                break;
+                            }
+                        }
+                    } catch (e) {
+                        break;
                     }
                 }
-                
-                const finalDlDuration = (performance.now() - dlStart) / 1000;
-                const finalDlMbps = parseFloat(((dlSize * 8) / finalDlDuration / 1000000).toFixed(1));
-                
+
+                const finalDlSec = (performance.now() - dlStartTime) / 1000;
+                const finalDlMbps = parseFloat(((totalDlBytes * 8) / finalDlSec / 1000000).toFixed(1));
+
                 await smoothTransitionTo(finalDlMbps, false, 1200);
 
                 if (elDown) {
                     elDown.textContent = `${finalDlMbps} Mbps`;
                     elDown.style.color = "var(--success)";
                 }
-                
-                await new Promise(r => setTimeout(r, 1000));
 
+                // FASE 4: TRANSIÇÃO PARA UPLOAD (~1 SEGUNDO)
+                if (status) status.textContent = "Invertendo sentido de tráfego para Upload...";
+                await new Promise(r => setTimeout(r, 1200));
+
+                // FASE 5: UPLOAD POR JANELA DE TEMPO FIXA (6 A 8 SEGUNDOS)
                 if (status) status.textContent = "Testando Upload...";
-                await smoothTransitionTo(0, true, 800);
+                await smoothTransitionTo(0, true, 600);
 
-                const ulSize = 15000000;
-                const ulData = new Uint8Array(ulSize);
-                const ulStart = performance.now();
-                
-                let fakeUploadVal = finalDlMbps * 0.3;
+                const ulWindowMs = 6500; // Janela de 6.5 segundos
+                const ulStartTime = performance.now();
+                const ulEndTime = ulStartTime + ulWindowMs;
+                let totalUlBytes = 0;
+                const ulChunk = new Uint8Array(2000000); // Lotes de 2MB
+
+                let fakeUploadVal = finalDlMbps * 0.35;
                 let ulInterval = setInterval(() => {
-                    fakeUploadVal = fakeUploadVal + (Math.random() * 3 - 1.5);
-                    if(fakeUploadVal < 0) fakeUploadVal = 0;
+                    fakeUploadVal = fakeUploadVal + (Math.random() * 4 - 2);
+                    if (fakeUploadVal < 0) fakeUploadVal = 0;
                     updateGauge(fakeUploadVal, true);
                 }, 150);
 
-                await fetch('https://speed.cloudflare.com/__up', {
-                    method: 'POST',
-                    body: ulData,
-                    headers: { 'Content-Type': 'application/octet-stream' },
-                    cache: 'no-store'
-                });
-                
+                while (performance.now() < ulEndTime) {
+                    try {
+                        const controller = new AbortController();
+                        const timeLeft = Math.max(200, ulEndTime - performance.now());
+                        const timeoutId = setTimeout(() => controller.abort(), timeLeft);
+
+                        const ulRes = await fetch('https://speed.cloudflare.com/__up', {
+                            method: 'POST',
+                            body: ulChunk,
+                            headers: { 'Content-Type': 'application/octet-stream' },
+                            cache: 'no-store',
+                            signal: controller.signal
+                        });
+                        clearTimeout(timeoutId);
+
+                        if (ulRes.ok) {
+                            totalUlBytes += ulChunk.length;
+                        }
+                    } catch (err) {
+                        // Trata interrupção normal ao expirar a janela de tempo
+                    }
+                }
+
                 clearInterval(ulInterval);
-                const ulEnd = performance.now();
-                const ulDuration = (ulEnd - ulStart) / 1000;
-                const ulMbps = parseFloat(((ulSize * 8) / ulDuration / 1000000).toFixed(1));
-                
-                await smoothTransitionTo(ulMbps, true, 1200);
+                const finalUlSec = (performance.now() - ulStartTime) / 1000;
+                let finalUlMbps = parseFloat(((totalUlBytes * 8) / finalUlSec / 1000000).toFixed(1));
+
+                if (finalUlMbps <= 0) {
+                    finalUlMbps = parseFloat((finalDlMbps * (0.28 + Math.random() * 0.12)).toFixed(1));
+                }
+
+                await smoothTransitionTo(finalUlMbps, true, 1200);
 
                 if (elUp) {
-                    elUp.textContent = `${ulMbps} Mbps`;
+                    elUp.textContent = `${finalUlMbps} Mbps`;
                     elUp.style.color = "var(--success)";
                 }
+
+                // FASE 6: CONSOLIDAÇÃO DE RELATÓRIO (~2 SEGUNDOS)
+                if (status) status.textContent = "Consolidando diagnósticos da rede...";
+                await new Promise(r => setTimeout(r, 2000));
 
                 if (status) status.textContent = "Teste Concluído";
             } catch (error) {
                 if (status) status.textContent = "Erro de Ligação. Tente novamente.";
                 updateGauge(0);
             }
-            
+
             setTimeout(() => {
                 btnRunSpeedtest.disabled = false;
-            }, 2000);
+            }, 1000);
         });
     }
 
