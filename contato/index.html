@@ -9,24 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-<body style="margin: 0; padding: 0;">
+<body>
     <div class="bg-glow"></div>
-    <div style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px 20px; box-sizing: border-box; width: 100%;">
-        <div style="max-width: 800px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; box-sizing: border-box;">
-            
-            <header class="premium-card" style="padding: 28px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center; width: 100%; box-sizing: border-box; margin: 0;">
-                <a href="/" style="display: inline-flex; justify-content: center; align-items: center;">
-                    <img src="/assets/logotipo.png" alt="IPCerto" style="height: 52px; width: auto; object-fit: contain;">
-                </a>
-                <a href="/" class="btn-primary" style="text-decoration: none; padding: 10px 22px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;">
-                    ← Voltar ao Início
-                </a>
+    <div class="app-layout" style="display: flex; justify-content: center; padding: 40px 20px;">
+        <div class="content-wrapper" style="max-width: 800px; width: 100%;">
+            <header class="top-header" style="margin-bottom: 30px;">
+                <div class="header-content" style="justify-content: space-between;">
+                    <a href="/" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+                        <img src="/assets/logotipo.png" alt="IPCerto" style="height: 32px;">
+                    </a>
+                    <a href="/" class="btn-primary" style="text-decoration: none; padding: 8px 16px; font-size: 0.85rem;">← Voltar ao Início</a>
+                </div>
             </header>
-            <main style="width: 100%; margin: 0; padding: 0; box-sizing: border-box;">
-                <div class="premium-card" style="padding: 36px 32px; text-align: center; width: 100%; box-sizing: border-box; margin: 0;">
-                    <h1 class="text-white mb-4" style="font-size: 1.6rem; font-weight: 700; border-bottom: 1px solid var(--border-color, #334155); padding-bottom: 16px; text-align: center;">Contato & Suporte</h1>
-                    <p class="text-muted mb-4" style="font-size: 0.95rem; text-align: center;">Tem alguma sugestão de melhoria, report de falha técnica ou deseja entrar em contato? Preencha o formulário abaixo.</p>
-                    <form id="contact-form" style="display: flex; flex-direction: column; gap: 18px; max-width: 600px; margin: 0 auto; text-align: left;">
+            <main class="main-content">
+                <div class="premium-card">
+                    <h1 class="text-white mb-4" style="font-size: 1.5rem;">Contato & Suporte</h1>
+                    <p class="text-muted mb-4" style="font-size: 0.9rem;">Tem alguma sugestão, relatou um bug ou deseja entrar em contato conosco? Preencha os dados abaixo ou envie-nos um e-mail.</p>
+                    <form id="contact-form" style="display: flex; flex-direction: column; gap: 16px; max-width: 600px;">
                         <div>
                             <label class="text-muted text-sm mb-2 d-block">O SEU NOME</label>
                             <input type="text" id="contact-name" class="form-control" placeholder="Insira o seu nome" required>
@@ -39,9 +38,9 @@
                             <label class="text-muted text-sm mb-2 d-block">MENSAGEM</label>
                             <textarea id="contact-msg" class="form-control" rows="4" placeholder="Escreva a sua mensagem..." required></textarea>
                         </div>
-                        <button type="submit" id="btn-send-contact" class="btn-primary" style="width: 100%; padding: 10px 30px;">Enviar Mensagem</button>
+                        <button type="submit" id="btn-send-contact" class="btn-primary" style="width: fit-content; padding: 0 30px;">Enviar Mensagem</button>
                     </form>
-                    <div id="contact-feedback" class="mt-4 hidden" style="padding: 12px 18px; border-radius: 8px; font-size: 0.88rem; max-width: 600px; margin: 0 auto;"></div>
+                    <div id="contact-feedback" class="mt-4 hidden" style="padding: 12px 18px; border-radius: 8px; font-size: 0.85rem; max-width: 600px;"></div>
                 </div>
             </main>
         </div>
@@ -53,8 +52,8 @@
             const feedback = document.getElementById("contact-feedback");
             feedback.textContent = `✔ Obrigado, ${name}! A sua mensagem foi enviada com sucesso.`;
             feedback.style.background = "rgba(52, 211, 153, 0.15)";
-            feedback.style.border = "1px solid var(--success, #34d399)";
-            feedback.style.color = "var(--success, #34d399)";
+            feedback.style.border = "1px solid var(--success)";
+            feedback.style.color = "var(--success)";
             feedback.classList.remove("hidden");
             e.target.reset();
         });
