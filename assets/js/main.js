@@ -1,34 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- MENU HAMBÚRGUER MOBILE (INTEGRADO COM SEGURANÇA) ---
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const sidebar = document.querySelector('.sidebar');
-
-    if (hamburgerBtn && sidebar) {
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        document.body.appendChild(overlay);
-
-        function toggleMenu() {
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-        }
-
-        hamburgerBtn.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-
-        // Fechar o menu automaticamente ao clicar numa opção no telemóvel
-        const mobileNavItems = sidebar.querySelectorAll('.nav-item, .logo');
-        mobileNavItems.forEach(item => {
-            item.addEventListener('click', () => {
-                if (window.innerWidth <= 992) {
-                    sidebar.classList.remove('open');
-                    overlay.classList.remove('active');
-                }
-            });
-        });
-    }
-
     // --- 1. GESTÃO DE TABS E TÍTULO DINÂMICO ---
     const navItems = document.querySelectorAll('.nav-item');
     const tabPanes = document.querySelectorAll('.tab-pane');
@@ -47,17 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'port-scanner': 'Port Scanner',
         'whois': 'Consulta WHOIS',
         'timestamp': 'Conversor Timestamp Unix',
-        'jwt-decoder': 'JWT Decoder',
-        'privacy': 'Política de Privacidade',
-        'terms': 'Termos de Uso',
-        'contact': 'Contacto'
+        'jwt-decoder': 'JWT Decoder'
     };
 
+    // Eventos de clique nas abas internas do painel principal
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             const targetId = item.getAttribute('data-target');
             
-            if (!targetId) return;
+            if (!targetId) return; // Se for link externo (como Política, Termos ou Contato), deixa seguir o fluxo normal
 
             const targetPane = document.getElementById(targetId);
             if (!targetPane) return;
@@ -74,12 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 pageTitle.textContent = tabTitles[targetId];
             }
             
-            if(targetId === 'headers') fetchHeaders();
-            if(targetId === 'dashboard') window.dispatchEvent(new Event('resize')); 
+            if (targetId === 'headers') fetchHeaders();
+            if (targetId === 'dashboard') window.dispatchEvent(new Event('resize'));
+            
+            window.history.pushState(null, null, window.location.pathname);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
 
-    // --- CLIQUE NA LOGO PARA VOLTAR AO DASHBOARD PRINCIPAL ---
+    // --- CLIQUE NA LOGO PARA VOLTAR AO DASHBOARD ---
     const siteLogo = document.getElementById('site-logo');
     if (siteLogo) {
         siteLogo.addEventListener('click', () => {
@@ -101,32 +73,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Suporte seguro para cliques nos links do rodapé
-    document.querySelectorAll('.footer-nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            const targetId = link.getAttribute('data-target');
-            
-            if (!targetId) return;
+    // --- 2. MENU HAMBÚRGUER MOBILE ---
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const sidebar = document.querySelector('.sidebar');
 
-            const targetPane = document.getElementById(targetId);
-            if (!targetPane) return;
+    if (hamburgerBtn && sidebar) {
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
 
-            e.preventDefault();
+        function toggleMenu() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
 
-            const matchingNavItem = document.querySelector(`.nav-item[data-target="${targetId}"]`);
-            
-            navItems.forEach(nav => nav.classList.remove('active'));
-            tabPanes.forEach(pane => pane.classList.remove('active'));
-            
-            if (matchingNavItem) matchingNavItem.classList.add('active');
-            targetPane.classList.add('active');
-            
-            if (pageTitle && tabTitles[targetId]) {
-                pageTitle.textContent = tabTitles[targetId];
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+
+        const mobileNavItems = sidebar.querySelectorAll('.nav-item, .logo');
+        mobileNavItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('active');
+                }
+            });
         });
-    });
+    }
 
     // --- FUNÇÃO GLOBAL DE CÓPIA ---
     document.querySelectorAll('.icon-btn').forEach(btn => {
@@ -136,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!targetElem) return;
             const textToCopy = targetElem.textContent;
             
-            if (textToCopy.includes('carregar') || textToCopy.includes('Não') || textToCopy.includes('Clique_em_Gerar')) return;
+            if (textToCopy.includes('Carregando') || textToCopy.includes('Indisponível') || textToCopy.includes('Clique_em_Gerar')) return;
             
             await navigator.clipboard.writeText(textToCopy);
             
@@ -159,14 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 2. DASHBOARD ---
+    // --- 3. DASHBOARD ---
     async function loadDashboard() {
         setInterval(() => {
             const timeInfo = document.getElementById('time-info');
-            if (timeInfo) timeInfo.textContent = new Date().toLocaleString('pt-PT');
+            if (timeInfo) timeInfo.textContent = new Date().toLocaleString('pt-BR');
         }, 1000);
 
-        // Define o texto do servidor de destino no Teste de Velocidade
         const speedDest = document.getElementById('speed-dest-info');
         if (speedDest) {
             speedDest.textContent = 'Servidor de São Paulo / Global';
@@ -185,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res6 = await fetch('/api/ip');
             const data6 = await res6.json();
-            let ipv6Text = data6.version === 'IPv6' ? data6.ip : 'Apenas IPv4 detetado';
+            let ipv6Text = data6.version === 'IPv6' ? data6.ip : 'Apenas IPv4 detectado';
             if (ipv6Text === '::1') ipv6Text = 'Localhost (Loopback)';
             const ipv6Elem = document.getElementById('ipv6-address');
             if (ipv6Elem) ipv6Elem.textContent = ipv6Text;
@@ -194,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ipv6Elem) ipv6Elem.textContent = 'Localhost (Loopback)'; 
         }
 
-        // --- SISTEMA ROBUSTO DE GEOLOCALIZAÇÃO COM FALLBACK ---
         let geoData = null;
         try {
             let geoUrl = 'https://ipapi.co/json/';
@@ -203,11 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ipVal && !ipVal.includes('Indisp')) geoUrl = `https://ipapi.co/${ipVal}/json/`;
 
             const geoRes = await fetch(geoUrl);
-            if (geoRes.ok) {
-                geoData = await geoRes.json();
-            }
+            if (geoRes.ok) geoData = await geoRes.json();
         } catch (err) {
-            console.warn('API principal de geo bloqueada ou indisponível, a tentar alternativa...');
+            console.warn('API principal de geo bloqueada ou indisponível, tentando alternativa...');
         }
 
         if (!geoData || !geoData.latitude) {
@@ -226,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 }
             } catch (altErr) {
-                console.error('Todas as APIs de geolocalização foram bloqueadas ou falharam:', altErr);
+                console.error('Todas as APIs de geolocalização falharam:', altErr);
             }
         }
 
@@ -243,7 +212,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (geoCountry) geoCountry.textContent = geoData.country_name || '-';
             if (geoAsn) geoAsn.textContent = geoData.asn || '-';
 
-            // Atualiza a Origem dinamicamente no Teste de Velocidade
             const speedOrigin = document.getElementById('speed-origin-info');
             if (speedOrigin) {
                 const city = geoData.city || 'Localidade Desconhecida';
@@ -259,9 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 const mapEl = document.getElementById('map');
                 if (mapEl) {
-                    if (window._ipcertoMap) {
-                        window._ipcertoMap.remove();
-                    }
+                    if (window._ipcertoMap) window._ipcertoMap.remove();
                     const map = L.map('map').setView([geoData.latitude, geoData.longitude], 12);
                     window._ipcertoMap = map;
 
@@ -296,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 3. DNS LOOKUP ---
+    // --- 4. DNS LOOKUP ---
     const btnDnsLookup = document.getElementById('btn-dns-lookup');
     if (btnDnsLookup) {
         btnDnsLookup.addEventListener('click', async () => {
@@ -304,13 +270,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const type = document.getElementById('dns-type-input').value;
             const out = document.getElementById('dns-result-output');
             if (!domain) return alert('Insira um domínio (ex: google.com)');
-            out.textContent = `A consultar registos ${type} para ${domain}...`;
+            out.textContent = `Consultando registros ${type} para ${domain}...`;
             
             try {
                 const res = await fetch(`https://dns.google/resolve?name=${domain}&type=${type}`);
                 const data = await res.json();
                 if (data.Status !== 0 || !data.Answer) {
-                    out.textContent = `; No records found for ${domain} (${type}).`;
+                    out.textContent = `; Nenhum registro encontrado para ${domain} (${type}).`;
                     return;
                 }
                 let resultStr = `;; ANSWER SECTION:\n`;
@@ -320,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4. TESTE DE LATÊNCIA (PING PRO) ---
+    // --- 5. TESTE DE LATÊNCIA (PING PRO) ---
     const btnRunPing = document.getElementById('btn-run-ping');
     if (btnRunPing) {
         btnRunPing.addEventListener('click', async () => {
@@ -354,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. TESTE SUA CONEXÃO (MOTOR DE JANELA DE TEMPO - FAST/SPEEDTEST STYLE) ---
+    // --- 6. TESTE SUA CONEXÃO (SPEEDTEST) ---
     function updateGauge(mbps, isUpload = false) {
         const liveVal = document.getElementById('speed-live-val');
         const gaugeBar = document.getElementById('gauge-bar');
@@ -415,7 +381,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (elPing) { elPing.textContent = "-- ms"; elPing.style.color = "var(--text-muted)"; }
 
             try {
-                // FASE 1: LATÊNCIA E JITTER (~3 SEGUNDOS)
                 if (status) status.textContent = "Analisando Latência e Jitter da rota...";
                 let pings = [];
                 for (let i = 0; i < 4; i++) {
@@ -431,13 +396,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     elPing.style.color = "var(--accent)";
                 }
 
-                // FASE 2: ESTABILIZAÇÃO DE BUFFERS (~1.5 SEGUNDOS)
                 if (status) status.textContent = "Estabilizando sockets de rede...";
                 await new Promise(r => setTimeout(r, 1500));
 
-                // FASE 3: DOWNLOAD POR JANELA DE TEMPO FIXA (8 A 10 SEGUNDOS)
                 if (status) status.textContent = "Testando Download (Banda Larga)...";
-                const dlWindowMs = 8500; // Janela fixa de 8.5 segundos
+                const dlWindowMs = 8500; 
                 const dlStartTime = performance.now();
                 const dlEndTime = dlStartTime + dlWindowMs;
                 let totalDlBytes = 0;
@@ -447,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const controller = new AbortController();
                         const signal = controller.signal;
 
-                        const chunkSize = 15000000; // 15MB
+                        const chunkSize = 15000000;
                         const dlRes = await fetch(`https://speed.cloudflare.com/__down?bytes=${chunkSize}`, { cache: 'no-store', signal });
                         const reader = dlRes.body.getReader();
 
@@ -465,9 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 break;
                             }
                         }
-                    } catch (e) {
-                        break;
-                    }
+                    } catch (e) { break; }
                 }
 
                 const finalDlSec = (performance.now() - dlStartTime) / 1000;
@@ -480,19 +441,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     elDown.style.color = "var(--success)";
                 }
 
-                // FASE 4: TRANSIÇÃO PARA UPLOAD (~1 SEGUNDO)
                 if (status) status.textContent = "Invertendo sentido de tráfego para Upload...";
                 await new Promise(r => setTimeout(r, 1200));
 
-                // FASE 5: UPLOAD POR JANELA DE TEMPO FIXA (6 A 8 SEGUNDOS)
                 if (status) status.textContent = "Testando Upload...";
                 await smoothTransitionTo(0, true, 600);
 
-                const ulWindowMs = 6500; // Janela de 6.5 segundos
+                const ulWindowMs = 6500;
                 const ulStartTime = performance.now();
                 const ulEndTime = ulStartTime + ulWindowMs;
                 let totalUlBytes = 0;
-                const ulChunk = new Uint8Array(2000000); // Lotes de 2MB
+                const ulChunk = new Uint8Array(2000000); 
 
                 let fakeUploadVal = finalDlMbps * 0.35;
                 let ulInterval = setInterval(() => {
@@ -516,21 +475,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                         clearTimeout(timeoutId);
 
-                        if (ulRes.ok) {
-                            totalUlBytes += ulChunk.length;
-                        }
-                    } catch (err) {
-                        // Trata interrupção normal ao expirar a janela de tempo
-                    }
+                        if (ulRes.ok) totalUlBytes += ulChunk.length;
+                    } catch (err) {}
                 }
 
                 clearInterval(ulInterval);
                 const finalUlSec = (performance.now() - ulStartTime) / 1000;
                 let finalUlMbps = parseFloat(((totalUlBytes * 8) / finalUlSec / 1000000).toFixed(1));
 
-                if (finalUlMbps <= 0) {
-                    finalUlMbps = parseFloat((finalDlMbps * (0.28 + Math.random() * 0.12)).toFixed(1));
-                }
+                if (finalUlMbps <= 0) finalUlMbps = parseFloat((finalDlMbps * (0.28 + Math.random() * 0.12)).toFixed(1));
 
                 await smoothTransitionTo(finalUlMbps, true, 1200);
 
@@ -539,23 +492,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     elUp.style.color = "var(--success)";
                 }
 
-                // FASE 6: CONSOLIDAÇÃO DE RELATÓRIO (~2 SEGUNDOS)
                 if (status) status.textContent = "Consolidando diagnósticos da rede...";
                 await new Promise(r => setTimeout(r, 2000));
 
                 if (status) status.textContent = "Teste Concluído";
             } catch (error) {
-                if (status) status.textContent = "Erro de Ligação. Tente novamente.";
+                if (status) status.textContent = "Erro de Conexão. Tente novamente.";
                 updateGauge(0);
             }
 
-            setTimeout(() => {
-                btnRunSpeedtest.disabled = false;
-            }, 1000);
+            setTimeout(() => { btnRunSpeedtest.disabled = false; }, 1000);
         });
     }
 
-    // --- 6. CIDR E WEBRTC ---
+    // --- 7. CIDR E WEBRTC ---
     const btnCalcCidr = document.getElementById('btn-calc-cidr');
     if (btnCalcCidr) {
         btnCalcCidr.addEventListener('click', () => {
@@ -587,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const webrtcResult = document.getElementById('webrtc-result');
             if (webrtcResult) webrtcResult.classList.remove('hidden');
             if (ipDisplay) {
-                ipDisplay.textContent = "A auditar..."; 
+                ipDisplay.textContent = "Auditando..."; 
                 ipDisplay.className = "mono text-muted";
             }
             const rtc = new RTCPeerConnection({ iceServers: [{ urls: "stun:stun.l.google.com:19302" }] });
@@ -603,8 +553,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
             setTimeout(() => { 
-                if(ipDisplay && ipDisplay.textContent === "A auditar...") { 
-                    ipDisplay.textContent = "Seguro (Sem Fuga)"; 
+                if(ipDisplay && ipDisplay.textContent === "Auditando...") { 
+                    ipDisplay.textContent = "Seguro (Sem Vazamento)"; 
                     ipDisplay.className = "mono text-success"; 
                 } 
             }, 3000);
@@ -621,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch { out.textContent = 'Erro ao ler os cabeçalhos.'; }
     }
 
-    // --- 7. GERADOR DE SENHAS ---
+    // --- 8. GERADOR DE SENHAS ---
     const pwdLengthInput = document.getElementById('pwd-length');
     const pwdLengthVal = document.getElementById('pwd-length-val');
     if (pwdLengthInput && pwdLengthVal) {
@@ -642,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 8. BASE64 ---
+    // --- 9. BASE64 ---
     const b64Input = document.getElementById('base64-input');
     const b64Output = document.getElementById('base64-output');
     
@@ -662,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 9. FERRAMENTAS AVANÇADAS (PORT SCANNER, WHOIS, TIMESTAMP, JWT) ---
+    // --- 10. FERRAMENTAS AVANÇADAS ---
     setInterval(() => {
         const tsElem = document.getElementById('current-unix-ts');
         if(tsElem) tsElem.textContent = Math.floor(Date.now() / 1000);
@@ -678,7 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ports.forEach(port => {
                 const badge = document.getElementById(`port-${port}`);
                 if (badge) {
-                    badge.textContent = "A testar...";
+                    badge.textContent = "Testando...";
                     badge.className = "ping-result mono text-muted";
                 }
             });
@@ -707,7 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const domain = whoisDomainInput ? whoisDomainInput.value.trim() : '';
             const out = document.getElementById('whois-result-output');
             if (!domain) return alert('Insira um domínio válido.');
-            if (out) out.textContent = `A consultar dados WHOIS para ${domain}...`;
+            if (out) out.textContent = `Consultando dados WHOIS para ${domain}...`;
             try {
                 const res = await fetch(`https://rdap.org/domain/${domain}`);
                 const data = await res.json();
@@ -730,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             const date = new Date(parseInt(val) * 1000);
-            out.textContent = `Data UTC: ${date.toUTCString()}\nData Local: ${date.toLocaleString('pt-PT')}`;
+            out.textContent = `Data UTC: ${date.toUTCString()}\nData Local: ${date.toLocaleString('pt-BR')}`;
         });
     }
 
@@ -766,47 +716,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (headerOut) headerOut.textContent = "Erro ao descodificar Header.";
                 if (payloadOut) payloadOut.textContent = "Verifique se o token JWT inserido está correto.";
             }
-        });
-    }
-
-    // --- 10. FORMULÁRIO DE CONTACTO FUNCIONAL ---
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('contact-name').value.trim();
-            const email = document.getElementById('contact-email').value.trim();
-            const msg = document.getElementById('contact-msg').value.trim();
-            const feedback = document.getElementById('contact-feedback');
-
-            if (!name || !email || !msg) {
-                feedback.textContent = "Por favor, preencha todos os campos do formulário.";
-                feedback.style.background = "rgba(248, 113, 113, 0.15)";
-                feedback.style.border = "1px solid var(--danger)";
-                feedback.style.color = "var(--danger)";
-                feedback.classList.remove('hidden');
-                return;
-            }
-
-            const btn = document.getElementById('btn-send-contact');
-            btn.disabled = true;
-            btn.textContent = "A enviar...";
-
-            setTimeout(() => {
-                feedback.textContent = `✔ Obrigado, ${name}! A sua mensagem foi enviada com sucesso. Entraremos em contacto em breve.`;
-                feedback.style.background = "rgba(52, 211, 153, 0.15)";
-                feedback.style.border = "1px solid var(--success)";
-                feedback.style.color = "var(--success)";
-                feedback.classList.remove('hidden');
-
-                contactForm.reset();
-                btn.disabled = false;
-                btn.textContent = "Enviar Mensagem";
-
-                setTimeout(() => {
-                    feedback.classList.add('hidden');
-                }, 6000);
-            }, 1000);
         });
     }
 
