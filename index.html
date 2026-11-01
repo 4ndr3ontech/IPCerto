@@ -59,15 +59,23 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line></svg>
                     Calculadora CIDR
                 </button>
+                <button class="nav-item" data-target="ipv6-test">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                    Testador IPv6 Direto
+                </button>
+                <button class="nav-item" data-target="ipv6-cidr">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg>
+                    Calculadora IPv6 CIDR
+                </button>
 
                 <p class="nav-title">SEGURANÇA & UTILITÁRIOS</p>
                 <button class="nav-item" data-target="webrtc">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    WebRTC Leak Test
+                    Teste WebRTC
                 </button>
                 <button class="nav-item" data-target="headers">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    HTTP Headers
+                    Cabeçalhos HTTP
                 </button>
                 <button class="nav-item" data-target="password-gen">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -75,13 +83,21 @@
                 </button>
                 <button class="nav-item" data-target="base64">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-6-6-6"></path><path d="M12 19h8"></path></svg>
-                    Base64 Tool
+                    Conversor Base64
+                </button>
+                <button class="nav-item" data-target="hash-gen">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Gerador de Hashes
+                </button>
+                <button class="nav-item" data-target="json-validator">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    Formatador JSON / YAML
                 </button>
 
                 <p class="nav-title">FERRAMENTAS AVANÇADAS</p>
                 <button class="nav-item" data-target="port-scanner">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-                    Port Scanner
+                    Scanner de Portas
                 </button>
                 <button class="nav-item" data-target="whois">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -93,7 +109,31 @@
                 </button>
                 <button class="nav-item" data-target="jwt-decoder">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.778-7.778zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
-                    JWT Decoder
+                    Decodificador JWT
+                </button>
+                <button class="nav-item" data-target="mac-gen">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    Gerador de Endereço MAC
+                </button>
+                <button class="nav-item" data-target="ssl-checker">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Inspecionador SSL/TLS
+                </button>
+                <button class="nav-item" data-target="redirect-checker">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 10 20 15 15 20"></polyline><path d="M4 4v7a4 4 0 0 0 4 4h12"></path></svg>
+                    Teste de Redirecionamento
+                </button>
+                <button class="nav-item" data-target="bandwidth-conv">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Conversor de Banda
+                </button>
+                <button class="nav-item" data-target="meta-generator">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                    Gerador de Meta Tags OG
+                </button>
+                <button class="nav-item" data-target="link-extractor">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                    Extrator de Links HTML
                 </button>
 
                 <p class="nav-title">INFORMAÇÕES</p>
@@ -205,11 +245,10 @@
                         </div>
                     </div>
 
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">O que é o seu Endereço IP?</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O endereço IP (Protocolo de Internet) é um identificador numérico exclusivo atribuído a cada dispositivo conectado a uma rede de computadores. O IPCerto detecta instantaneamente o seu IPv4 e IPv6 públicos, além de fornecer o seu provedor de acesso (ISP), ASN e localização geográfica estimada no mapa.
+                            O endereço IP (Protocolo de Internet) é o identificador numérico exclusivo e indispensável atribuído a cada dispositivo conectado a uma rede de computadores em todo o mundo. Através dele, os pacotes de dados conseguem encontrar o destino correto na web, permitindo a comunicação entre servidores e clientes. O IPCerto detecta instantaneamente o seu IPv4 e IPv6 públicos, apresentando também o seu provedor de acesso (ISP), número de sistema autônomo (ASN) e a sua localização geográfica estimada com precisão em um mapa interativo.
                         </p>
                     </div>
                 </section>
@@ -231,12 +270,10 @@
                         </div>
                         <pre class="code-block mt-4" id="dns-result-output">Aguardando consulta...</pre>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Sobre o DNS Lookup</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O DNS Lookup (Domain Name System) é uma ferramenta essencial para administradores de sistemas e desenvolvedores. Permite consultar os registros associados a um domínio na internet, como endereços IPv4 (registro A), servidores de correio eletrônico (registro MX) ou políticas de segurança, ajudando a diagnosticar falhas de propagação e configuração.
+                            O Domain Name System (DNS) atua como a agenda telefônica da internet, traduzindo nomes de domínios fáceis de memorizar em endereços IP legíveis por máquinas. A ferramenta de DNS Lookup é indispensável para administradores de sistemas, profissionais de TI e desenvolvedores web que precisam inspecionar registros específicos. Ela permite consultar registros do tipo A para endereços IPv4, AAAA para IPv6, MX para servidores de correio eletrônico e TXT para validação de políticas de segurança como SPF e DKIM, ajudando a diagnosticar rapidamente falhas de propagação, roteamento e configuração de domínios.
                         </p>
                     </div>
                 </section>
@@ -248,34 +285,14 @@
                         <button id="btn-run-ping" class="btn-primary pulse-btn">Iniciar Teste</button>
                     </div>
                     <div class="latency-grid mt-4">
-                        <div class="premium-card latency-card-pro">
-                            <div class="latency-head">
-                                <span class="latency-dot"></span>
-                                <span class="latency-name">Cloudflare (1.1.1.1)</span>
-                            </div>
-                            <div class="latency-result mono" id="ping-cf">-- ms</div>
-                        </div>
-                        <div class="premium-card latency-card-pro">
-                            <div class="latency-head">
-                                <span class="latency-dot"></span>
-                                <span class="latency-name">Google (8.8.8.8)</span>
-                            </div>
-                            <div class="latency-result mono" id="ping-gg">-- ms</div>
-                        </div>
-                        <div class="premium-card latency-card-pro">
-                            <div class="latency-head">
-                                <span class="latency-dot"></span>
-                                <span class="latency-name">Quad9 (9.9.9.9)</span>
-                            </div>
-                            <div class="latency-result mono" id="ping-q9">-- ms</div>
-                        </div>
+                        <div class="premium-card latency-card-pro"><div class="latency-head"><span class="latency-dot"></span><span class="latency-name">Cloudflare (1.1.1.1)</span></div><div class="latency-result mono" id="ping-cf">-- ms</div></div>
+                        <div class="premium-card latency-card-pro"><div class="latency-head"><span class="latency-dot"></span><span class="latency-name">Google (8.8.8.8)</span></div><div class="latency-result mono" id="ping-gg">-- ms</div></div>
+                        <div class="premium-card latency-card-pro"><div class="latency-head"><span class="latency-dot"></span><span class="latency-name">Quad9 (9.9.9.9)</span></div><div class="latency-result mono" id="ping-q9">-- ms</div></div>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Como funciona o Teste de Latência?</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O teste mede o tempo de resposta (RTT em milissegundos) entre o seu dispositivo e os principais resolvedores DNS globais (Cloudflare, Google e Quad9). Valores baixos indicam rotas diretas e menor atraso na navegação, sendo cruciais para jogos online e chamadas em tempo real.
+                            Esta ferramenta mede com precisão o tempo de resposta, conhecido como RTT (Round Trip Time) em milissegundos, entre o seu dispositivo e os principais resolvedores e backbones de DNS globais, como Cloudflare, Google e Quad9. Valores baixos de latência indicam rotas de rede diretas, conexões estáveis e menor atraso na transmissão de pacotes de dados. Esse fator é absolutamente crucial para garantir o desempenho ideal em jogos online competitivos, transmissões de vídeo ao vivo e chamadas de voz ou vídeo em tempo real sem interrupções incômodas.
                         </p>
                     </div>
                 </section>
@@ -343,7 +360,7 @@
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Sobre o Teste de Velocidade</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O teste de conexão avalia a taxa de transferência real de dados para download e upload, além de medir o tempo de resposta (ping). Utilizando a infraestrutura de ponta da Cloudflare, o sistema simula tráfego intenso para verificar se a sua operadora entrega a largura de banda contratada.
+                            O teste de conexão avalia exaustivamente a taxa de transferência real de dados para download e upload, medindo simultaneamente o tempo de resposta da rota (ping). Utilizando a infraestrutura de ponta e servidores de alta performance, o sistema simula tráfego intenso para verificar com total exatidão se o seu provedor de internet está entregando efetivamente a largura de banda contratada em plano, ajudando a identificar gargalos de rota, oscilações na rede e eventuais perdas de pacotes durante o uso diário.
                         </p>
                     </div>
                 </section>
@@ -365,12 +382,43 @@
                             <div class="geo-item"><span>Total de Hosts Úteis</span><span class="mono text-accent">-</span></div>
                         </div>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Entenda a Notação CIDR</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            A notação CIDR (Classless Inter-Domain Routing) define blocos de endereços IP e as respectivas máscaras de sub-rede. Esta calculadora auxilia engenheiros de rede a determinar instantaneamente o endereço de broadcast, os limites de hosts úteis e a distribuição de IPs numa infraestrutura.
+                            A notação CIDR (Classless Inter-Domain Routing) define de forma flexível blocos de endereços IP e as respetivas máscaras de sub-rede sem as antigas restrições de classes fixas. Esta calculadora avançada auxilia engenheiros de rede, analistas de suporte e administradores de infraestrutura a determinar instantaneamente o endereço de broadcast exato, os limites do primeiro e último host útil, além da distribuição geral de endereços IP disponíveis dentro de uma determinada sub-rede.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 1. TESTADOR IPV6 DIRECT -->
+                <section id="ipv6-test" class="tab-pane">
+                    <p class="text-muted">Verifique a conectividade e suporte nativo a IPv6.</p>
+                    <div class="premium-card mt-4 text-center py-5">
+                        <button id="btn-run-ipv6" class="btn-primary">Testar Conectividade IPv6</button>
+                        <pre class="code-block mt-4" id="ipv6-result-output">Aguardando execução do teste...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">O que é o Testador IPv6?</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            O protocolo IPv6 representa a evolução e o padrão moderno de endereçamento da internet, projetado para suceder o esgotado sistema IPv4 com um espaço quase infinito de endereços únicos. Com o esgotamento global de blocos IPv4, a adoção do IPv6 tornou-se uma prioridade estratégica para operadoras e grandes redes. Esta ferramenta especializada executa testes diretos para validar se o seu dispositivo, sistema operacional e provedor de acesso possuem conectividade nativa, estável e totalmente ativa com a espinha dorsal da internet baseada em IPv6.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 2. CALCULADORA IPV6 CIDR -->
+                <section id="ipv6-cidr" class="tab-pane">
+                    <p class="text-muted">Planejamento de sub-redes IPv6.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="ipv6-cidr-input" class="form-control mono" placeholder="2001:db8::/64">
+                            <button id="btn-calc-ipv6" class="btn-primary">Calcular IPv6</button>
+                        </div>
+                        <pre class="code-block mt-4" id="ipv6-cidr-output">Insira um prefixo IPv6 válido...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Planeamento com IPv6 CIDR</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            O planeamento e o dimensionamento de sub-redes baseadas em IPv6 exigem ferramentas especializadas e precisas devido à enorme escala do protocolo, que utiliza endereços de 128 bits organizados em blocos hexadecimais. Diferente do IPv4, gerenciar redes IPv6 envolve lidar com prefixos amplos como /64 ou /48 para estruturas corporativas e residenciais. Esta calculadora inteligente simplifica drasticamente a divisão de blocos, expansão de endereços e a gestão de roteamento em arquiteturas de redes modernas e data centers.
                         </p>
                     </div>
                 </section>
@@ -385,12 +433,10 @@
                             <span class="mono text-danger ip-text" id="local-ip-display"></span>
                         </div>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">O que é um Vazamento WebRTC?</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O WebRTC permite comunicações de áudio e vídeo diretas no navegador, mas pode expor o seu endereço IP real mesmo quando você está utilizando uma rede privada virtual (VPN) ou proxy. Esta auditoria testa se o seu navegador está vazando dados sensíveis de rede.
+                            O WebRTC (Web Real-Time Communication) é uma tecnologia integrada aos navegadores modernos que possibilita a troca direta de fluxos de áudio, vídeo e dados peer-to-peer sem a necessidade de plugins externos. No entanto, devido ao seu funcionamento interno, essa API pode expor o seu endereço IP real e local, mesmo quando você está navegando protegido por trás de uma rede privada virtual (VPN) ou proxy corporativo. Esta auditoria de segurança testa rigorosamente o seu navegador para identificar se há falhas de isolamento e vazamento de dados confidenciais de rede.
                         </p>
                     </div>
                 </section>
@@ -401,12 +447,10 @@
                     <div class="premium-card mt-4 p-0">
                         <pre class="code-block m-0 border-0" id="headers-output" style="border-radius: 12px;">Capturando payloads...</pre>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
-                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Análise de HTTP Headers</h4>
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Análise de Cabeçalhos HTTP</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            Os cabeçalhos HTTP (Headers) revelam informações cruciais sobre a requisição enviada pelo seu navegador ao servidor, incluindo o tipo de agente de usuário (User-Agent), aceitação de codificação, cookies e parâmetros de conexão. Útil para auditorias de segurança e desenvolvimento web.
+                            Os cabeçalhos HTTP (Headers) revelam informações cruciais e metadados transmitidos nas entrelinhas de cada requisição enviada pelo seu navegador ao servidor web remoto. Eles contêm dados valiosos, incluindo o tipo de agente de usuário (User-Agent) do seu sistema, os formatos e codificações de conteúdo aceites, políticas de cache, estado de cookies e parâmetros detalhados de conexão. Esta ferramenta é indispensável para desenvolvedores web, analistas de segurança e auditores que precisam inspecionar o comportamento exato das requisições de rede em tempo real.
                         </p>
                     </div>
                 </section>
@@ -429,12 +473,10 @@
                             <button id="btn-generate-pwd" class="btn-primary">Gerar Nova Senha</button>
                         </div>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Segurança com Geração Local</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            Este gerador utiliza a API criptográfica nativa do navegador (`window.crypto.getRandomValues`) para criar senhas altamente complexas e seguras combinando letras maiúsculas, minúsculas, números e símbolos especiais. O processamento é 100% local, garantindo total privacidade.
+                            Este gerador inteligente utiliza a API de criptografia nativa e segura do navegador (`window.crypto.getRandomValues`) para criar credenciais altamente complexas, robustas e imunes a ataques de força bruta. O sistema combina aleatoriamente letras maiúsculas, minúsculas, números e símbolos especiais de acordo com o comprimento desejado pelo utilizador. Todo o processo de geração e cálculo ocorre de forma 100% local no seu próprio dispositivo, garantindo total privacidade, confidencialidade e proteção contra interceptações externas.
                         </p>
                     </div>
                 </section>
@@ -450,12 +492,45 @@
                         </div>
                         <textarea id="base64-output" class="form-control mono" rows="4" placeholder="O resultado aparecerá aqui..." readonly style="background: rgba(255,255,255,0.02);"></textarea>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Para que serve o Base64?</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O Base64 é um método de codificação utilizado para converter dados binários em texto ASCII legível, facilitando o transporte de informações através de redes e protocolos que lidam mal com caracteres binários. A ferramenta executa a conversão diretamente no seu navegador, sem enviar dados para servidores externos.
+                            O Base64 é um método padrão de codificação amplamente utilizado na computação para converter dados binários brutos em sequências de texto ASCII seguras e legíveis. Ele facilita significativamente o transporte de informações através de redes, e-mails, APIs e protocolos web que tradicionalmente lidam mal com caracteres binários especiais. Esta ferramenta executa todo o processo de codificação (encode) e decodificação (decode) diretamente no seu navegador através de scripts locais, assegurando rapidez e privacidade sem enviar dados para servidores externos.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 3. GERADOR DE HASHES -->
+                <section id="hash-gen" class="tab-pane">
+                    <p class="text-muted">Gere hashes criptográficos (SHA-1, SHA-256, SHA-512) localmente.</p>
+                    <div class="premium-card mt-4">
+                        <textarea id="hash-input" class="form-control mono" rows="3" placeholder="Insira o texto para gerar hash..."></textarea>
+                        <button id="btn-gen-hash" class="btn-primary mt-3">Gerar Hashes</button>
+                        <pre class="code-block mt-4" id="hash-result-output">Resultados aparecerão aqui...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Entenda o Gerador de Hashes</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            Os hashes criptográficos transformam qualquer bloco de texto ou ficheiro numa impressão digital digital única de tamanho fixo através de algoritmos matemáticos unidirecionais complexos. Esta ferramenta utilitária gera localmente hashes seguros utilizando algoritmos consagrados como SHA-1, SHA-256 e SHA-512. Eles são amplamente aplicados no desenvolvimento para verificar a integridade de dados transmitidos, validar assinaturas digitais, armazenar palavras-passe de forma segura e conferir se ficheiros descarregados da internet não sofreram nenhuma alteração maliciosa.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 4. FORMATADOR JSON / YAML -->
+                <section id="json-validator" class="tab-pane">
+                    <p class="text-muted">Valide, formate e limpe estruturas JSON instantaneamente.</p>
+                    <div class="premium-card mt-4">
+                        <textarea id="json-input" class="form-control mono" rows="5" placeholder='{"exemplo": true}'></textarea>
+                        <div class="input-group mt-3">
+                            <button id="btn-format-json" class="btn-primary">Formatar / Beautify</button>
+                            <button id="btn-minify-json" class="btn-primary" style="background: #27272a;">Minificar</button>
+                        </div>
+                        <pre class="code-block mt-4" id="json-result-output">Resultado formatado...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Sobre a Validação JSON</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            Ferramenta essencial e diária para desenvolvedores de software, engenheiros de dados e analistas de APIs. Ela permite validar a sintaxe rigorosa, estruturar, indentar (*beautify*) ou compactar (*minify*) blocos complexos de dados no formato JSON em frações de segundo. Ao colar um código desorganizado ou corrompido, o sistema identifica instantaneamente erros de sintaxe e devolve uma estrutura limpa e legível, facilitando a depuração de cargas úteis (payloads) de rede e ficheiros de configuração de sistemas.
                         </p>
                     </div>
                 </section>
@@ -477,12 +552,10 @@
                             <div class="premium-card ping-card-pro"><span class="text-muted">MySQL (3306)</span><span class="ping-result mono text-muted" id="port-3306">--</span></div>
                         </div>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Auditoria de Portas de Rede</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O Port Scanner verifica o estado das portas essenciais (como HTTP 80, HTTPS 443, SSH 22 e DNS 53) num host de destino. É uma ferramenta fundamental para detectar serviços ativos, analisar regras de firewall e validar a segurança de servidores.
+                            O Port Scanner realiza uma varredura para checar o estado operacional das portas de rede mais essenciais e utilizadas em servidores (como HTTP 80, HTTPS 443, SSH 22, DNS 53, FTP 21 e MySQL 3306) em qualquer domínio ou endereço IP de destino. Trata-se de uma ferramenta fundamental para administradores de redes e profissionais de segurança cibernética diagnosticarem serviços ativos, testarem regras restritivas de firewalls, verificarem a acessibilidade de aplicações web e validarem a postura defensiva de servidores em ambientes corporativos.
                         </p>
                     </div>
                 </section>
@@ -497,12 +570,10 @@
                         </div>
                         <pre class="code-block mt-4" id="whois-result-output">Aguardando consulta...</pre>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Consulta WHOIS e RDAP</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            A ferramenta de consulta WHOIS/RDAP busca dados de registro de domínios em bases de dados globais. Permite verificar informações de contato administrativo, datas de criação, expiração e os servidores DNS responsáveis por um determinado endereço na internet.
+                            A ferramenta de consulta WHOIS e RDAP realiza buscas estruturadas em bases de dados globais de registo para recuperar informações públicas e administrativas associadas a qualquer domínio na internet. Ela permite verificar dados cruciais como a entidade registadora, contactos técnicos e administrativos, datas oficiais de criação, prazos exatos de expiração do domínio e os servidores de nomes (NS) autoritativos responsáveis pela zona. É um recurso indispensável para profissionais de TI investigarem a titularidade de marcas, planearem renovações e auditarem a infraestrutura de sites.
                         </p>
                     </div>
                 </section>
@@ -526,12 +597,10 @@
                         </div>
                         <pre class="code-block" id="ts-conversion-result">O resultado da conversão aparecerá aqui...</pre>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">O que é o Timestamp Unix?</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O Timestamp Unix representa o número de segundos transcorridos desde 1 de janeiro de 1970 (Era Unix), desconsiderando segundos intercalares. É amplamente utilizado em bancos de dados, logs de sistemas e APIs para registrar eventos de forma universal e independente de fusos horários.
+                            O Timestamp Unix representa o número exato de segundos que se passaram desde o início da Era Unix (00:00:00 UTC em 1 de janeiro de 1970), desconsiderando segundos intercalares. Trata-se de um formato numérico universal amplamente adotado em sistemas operacionais, bancos de dados relacionais, logs de servidores e APIs REST para registrar eventos de forma cronológica, independente de fusos horários ou formatações regionais de calendário. Esta ferramenta interativa converte instantaneamente valores numéricos em datas legíveis e vice-versa para auxiliar programadores no trabalho diário.
                         </p>
                     </div>
                 </section>
@@ -555,12 +624,118 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Caixa Explicativa -->
                     <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
                         <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Análise de JSON Web Tokens (JWT)</h4>
                         <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
-                            O JWT é um padrão aberto baseado em JSON para criar tokens de acesso seguros entre aplicações. Este decodificador permite inspecionar o cabeçalho (algoritmo e tipo) e o corpo (payload com claims e dados do usuário) instantaneamente no seu navegador, sem expor chaves secretas ou credenciais.
+                            O JWT (JSON Web Token) é um padrão aberto baseado em JSON compacto e seguro para transmitir informações de autenticação e autorização entre partes de forma confiável. Este descodificador especializado permite aos desenvolvedores inspecionar detalhadamente o Header (que contém o algoritmo de assinatura e o tipo de token) e o Payload (que armazena as claims, permissões e dados do utilizador autenticado) instantaneamente no navegador. Todo o processamento ocorre em ambiente estritamente local, garantindo que chaves secretas, credenciais e dados confidenciais de utilizadores nunca sejam expostos ou enviados para servidores externos.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 5. GERADOR & OUI MAC -->
+                <section id="mac-gen" class="tab-pane">
+                    <p class="text-muted">Gere endereços MAC aleatórios válidos.</p>
+                    <div class="premium-card mt-4">
+                        <button id="btn-gen-mac" class="btn-primary mb-3">Gerar MAC Address Aleatório</button>
+                        <pre class="code-block mt-4" id="mac-result-output">O MAC gerado aparecerá aqui...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Para que serve o Gerador MAC?</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            O endereço MAC (Media Access Control) atua como um identificador físico exclusivo atribuído a uma interface de rede ou placa controladora de hardware. Esta ferramenta utilitária gera localmente endereços MAC aleatórios, válidos e devidamente formatados segundo os padrões internacionais. Eles são extremamente úteis para administradores de sistemas, engenheiros de redes e programadores que necessitam realizar testes em laboratório, simulações de roteamento em redes locais, configuração de máquinas virtuais e testes de políticas de filtragem em switches e pontos de acesso Wi-Fi.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 6. INSPECIONADOR SSL/TLS -->
+                <section id="ssl-checker" class="tab-pane">
+                    <p class="text-muted">Valide e consulte informações de certificados SSL de domínios via API pública.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="ssl-domain-input" class="form-control" placeholder="Ex: github.com">
+                            <button id="btn-run-ssl" class="btn-primary">Inspecionar SSL</button>
+                        </div>
+                        <pre class="code-block mt-4" id="ssl-result-output">Aguardando domínio...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Inspecção de Certificados SSL</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            Os certificados digitais SSL/TLS são pilares fundamentais da segurança na web, garantindo a criptografia de ponta a ponta e a confidencialidade das comunicações entre o utilizador e o servidor. Este inspecionador avançado consulta bases de dados públicas para verificar em tempo real a validade, a cadeia de confiança, a autoridade emissora (CA) e os prazos de expiração de certificados de qualquer domínio. É uma ferramenta indispensável para equipas de operações prevenirem interrupções de serviços causadas por certificados vencidos ou mal configurados.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 7. TESTADOR DE REDIRECIONAMENTO -->
+                <section id="redirect-checker" class="tab-pane">
+                    <p class="text-muted">Analise a cadeia de saltos de URLs.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group">
+                            <input type="text" id="redirect-url-input" class="form-control" placeholder="Ex: https://google.com">
+                            <button id="btn-run-redirect" class="btn-primary">Analisar URL</button>
+                        </div>
+                        <pre class="code-block mt-4" id="redirect-result-output">Aguardando URL...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Análise de Redirecionamentos</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            Ao reestruturar páginas web, migrar domínios ou configurar campanhas de marketing, as URLs costumam passar por múltiplos saltos de encaminhamento antes de chegarem ao destino final. Esta ferramenta analisa detalhadamente toda a cadeia de redirecionamento de uma página, exibindo passo a passo os códigos de estado HTTP envolvidos (como 301 Permanent Redirect, 302 Found, 307 Temporary e 200 OK). Ela ajuda profissionais de SEO e programadores a identificarem loops infinitos de redirecionamento, perda desnecessária de desempenho e falhas de configuração em servidores web.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 8. CONVERSOR DE BANDA -->
+                <section id="bandwidth-conv" class="tab-pane">
+                    <p class="text-muted">Converta unidades de taxa de transferência e armazenamento.</p>
+                    <div class="premium-card mt-4">
+                        <div class="input-group mb-3">
+                            <input type="number" id="bw-val-input" class="form-control" placeholder="Valor (ex: 100)">
+                            <select id="bw-unit-input" class="form-control select-fixed">
+                                <option value="Mbps">Mbps (Megabits/s)</option>
+                                <option value="MBs">MB/s (Megabytes/s)</option>
+                                <option value="Gbps">Gbps (Gigabits/s)</option>
+                            </select>
+                            <button id="btn-conv-bw" class="btn-primary">Converter</button>
+                        </div>
+                        <pre class="code-block mt-4" id="bw-result-output">Resultados da conversão...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Conversor de Unidades de Banda</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            A conversão entre diferentes unidades de medida de rede costuma gerar confusão constante, especialmente entre Megabits por segundo (Mbps), usados comercialmente por operadoras em planos de internet, e Megabytes por segundo (MB/s), que medem o fluxo real de descarregamento de ficheiros. Esta ferramenta traduz instantaneamente taxas de transferência e unidades de largura de banda, permitindo aos utilizadores calcular e comparar com precisão a velocidade contratada com o desempenho real observado nos testes de download.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 9. GERADOR META TAGS OG -->
+                <section id="meta-generator" class="tab-pane">
+                    <p class="text-muted">Crie tags Open Graph para redes sociais e SEO.</p>
+                    <div class="premium-card mt-4">
+                        <input type="text" id="meta-title-input" class="form-control mb-3" placeholder="Título da Página">
+                        <input type="text" id="meta-desc-input" class="form-control mb-3" placeholder="Descrição curta">
+                        <input type="text" id="meta-url-input" class="form-control mb-3" placeholder="URL Canônica">
+                        <button id="btn-gen-meta" class="btn-primary">Gerar Código HTML</button>
+                        <pre class="code-block mt-4" id="meta-result-output">&lt;meta property="og:title" ...&gt;</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Otimização com Open Graph</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            As Open Graph (OG) tags são meta etiquetas essenciais inseridas no cabeçalho HTML de páginas web para controlar rigorosamente como o conteúdo é apresentado quando partilhado em redes sociais como WhatsApp, Facebook, LinkedIn e Twitter. Este gerador interativo constrói de forma limpa e padronizada os blocos de código HTML para títulos, descrições, imagens e URLs canônicas. Ele impulsiona diretamente o desempenho de SEO técnico e assegura que os links do seu site ganhem impacto visual atrativo nas plataformas sociais.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- 10. EXTRATOR DE LINKS HTML -->
+                <section id="link-extractor" class="tab-pane">
+                    <p class="text-muted">Extraia todos os links e URLs presentes em códigos ou textos HTML.</p>
+                    <div class="premium-card mt-4">
+                        <textarea id="html-source-input" class="form-control mono" rows="5" placeholder="Insira o HTML aqui..."></textarea>
+                        <button id="btn-extract-links" class="btn-primary mt-3">Extrair URLs</button>
+                        <pre class="code-block mt-4" id="links-result-output">Links extraídos aparecerão aqui...</pre>
+                    </div>
+                    <div class="premium-card mt-4" style="background: rgba(2, 132, 199, 0.02); border-left: 3px solid var(--accent);">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Extrator de Hiperlinks</h4>
+                        <p class="text-muted" style="font-size: 0.85rem; line-height: 1.6;">
+                            Ao analisar páginas web, auditar código-fonte ou recolher dados de estruturas complexas, a necessidade de extrair URLs e hiperlinks de forma limpa é comum. Esta ferramenta analisa blocos de texto ou código HTML inseridos pelo utilizador, isolando e extraindo todas as referências presentes nas tags de âncora (`<a>`). Em seguida, organiza os resultados de forma limpa numa lista pronta para cópia ou processamento adicional, poupando tempo valioso em tarefas de web scraping e auditorias de conteúdo.
                         </p>
                     </div>
                 </section>
